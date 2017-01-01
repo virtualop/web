@@ -1,0 +1,9 @@
+<h2>Machines</h2>
+
+<div class="machine_list">
+  <% @machines.each do |machine| %>
+  <div class="machine">
+    <p class="title"><%= machine["name"] %></p>
+  </div>
+  <% end %>
+</div>

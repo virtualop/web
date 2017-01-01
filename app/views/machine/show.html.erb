@@ -1,0 +1,5 @@
+<h1><%= @machine.name %></h1>
+<br/>
+
+<h3>distro: <%= @machine.distro %></h3>
+<h3>connected as : <%= @machine.ssh("id") %></h3>

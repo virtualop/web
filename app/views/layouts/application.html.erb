@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>yo</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <link rel="shortcut icon" href="/assets/favicon.ico" />
+  <link href='http://fonts.googleapis.com/css?family=Oxygen|Varela+Round|Orienta|Asap|Karla' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Anaheim' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="header">
+    <span id="logo">
+      <span class="helper"></span>
+      <img src="/assets/dblarr_small.png" />
+      <span class="title">virtualop</span>
+    </span>
+    <span id="toolbar">
+      <span class="item">
+        <!--img src="/assets/clip.png"-->
+        <i class="fa fa-wrench"></i>
+      </span>
+    </span>
+  </div>
+
+  <div id="main">
+    <div id="content"><%= yield %></div>
+  </div>
+
+  <div id="footer">
+    <!--span class="helper"></span-->
+    <!--span class="text">CSS hates me (back).</span-->
+  </div>
+</body>
+</html>

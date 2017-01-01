@@ -1,0 +1,22 @@
+<h2>Services</h2>
+
+<table>
+  <thead>
+    <th>Name</th>
+    <th>Cluster-IP</th>
+    <th>External IP</th>
+    <th>Ports</th>
+    <th>Age</th>
+  </thead>
+  <tbody>
+    <% @services.each do |service| %>
+    <tr>
+      <td><%= service[:name] %></td>
+      <td><%= service[:cluster_ip] %></td>
+      <td><%= service[:external_ip] %></td>
+      <td><%= service[:ports] %></td>
+      <td><%= service[:age] %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
