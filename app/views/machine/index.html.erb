@@ -3,7 +3,7 @@
 <div class="machine_list">
   <% @machines.each do |machine| %>
   <div class="machine">
-    <p class="title"><%= machine["name"] %></p>
+    <p class="title"><a href="/machine/<%= machine["name"] %>"><%= machine["name"] %></a></p>
   </div>
   <% end %>
 </div>
