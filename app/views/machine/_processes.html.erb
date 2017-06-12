@@ -1,0 +1,17 @@
+<h3>processes</h3>
+<div class="command_result">
+<table>
+<tr>
+  <% %w|pid command_short|.each do |name| %>
+    <th id="<%= name %>"><%= name %></th>
+  <% end %>
+</tr>
+<% @machine.processes.sort_by { |row| [ row[:pid] ].join(":") }.each do |row| %>
+<tr>
+  <% %i|pid command_short|.each do |col| %>
+    <td id="<%= col %>"><%= row[col] %></td>
+  <% end %>
+</tr>
+<% end %>
+</table>
+</div>

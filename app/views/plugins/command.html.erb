@@ -1,0 +1,15 @@
+<p class="breadcrumb">
+  <a href="/plugins/index">Plugins</a> &gt;
+  <a href="/plugins/<%= @plugin.name %>"><%= @plugin.name %></a> &gt;
+    <%= @command.short_name %>
+</p>
+
+<br/>
+
+<h2>Source</h2>
+
+<p>from: <%= @source[:file_name] %></p>
+<br/>
+<div class="source_wrap">
+  <pre><%= @source[:code] %></pre>
+</div>

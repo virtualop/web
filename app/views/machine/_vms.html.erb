@@ -1,0 +1,20 @@
+<% data = @machine.list_vms.sort_by { |row| [ row[:name] ].join(":") } %>
+<% unless data.nil? || data.size == 0 %>
+<h3>VMs</h3>
+<div class="command_result">
+<table>
+<tr>
+  <% %w|name state|.each do |name| %>
+    <th id="<%= name %>"><%= name %></th>
+  <% end %>
+</tr>
+<% data.each do |row| %>
+<tr>
+  <% %w|name state|.each do |col| %>
+    <td id="<%= col %>"><%= row[col] %></td>
+  <% end %>
+</tr>
+<% end %>
+</table>
+</div>
+<% end %>

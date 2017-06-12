@@ -1,7 +1,7 @@
 PATH
   remote: ../plugins
   specs:
-    vop-plugins (0.3.2)
+    vop-plugins (0.3.3)
 
 PATH
   remote: ../vop
@@ -181,7 +181,7 @@ GEM
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.0)
-    tzinfo (1.2.2)
+    tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uglifier (3.0.4)
       execjs (>= 0.3.0, < 3)

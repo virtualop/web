@@ -1,0 +1,7 @@
+<h3 id="moses">Holy Moses!</h3>
+
+<div id="hostmap">
+  <% @map.each do |row| %>
+    <%= render partial: "host", :object => row %>
+  <% end %>
+</div>

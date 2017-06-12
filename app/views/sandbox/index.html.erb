@@ -2,7 +2,7 @@
 <ul>
   <li>name: <%= @identity %></li>
   <li>hostname: <tt><%= $vop.system_call("hostname") %></tt>
-  <li>SSH: <tt><%= ! $vop.ssh("id").nil? %></tt></li>
+  <li>SSH: <tt><%= ! $vop.ssh("machine" => "localhost", "command" => "id").nil? %></tt></li>
   <li>sudo: <tt><%= ! $vop.system_call("sudo -l").nil? %></tt></li>
   <li>local root: <tt><%= $vop.system_call("sudo id") %></tt></li>
 </ul>

@@ -1,0 +1,28 @@
+<p class="breadcrumb"><a href="/plugins/index">Plugins</a> &gt; <%= @plugin.name %></p>
+
+<br/>
+
+<h2>Commands</h2>
+<br/>
+
+<ul>
+<% @commands.each do |command| %>
+<li>
+  <p class="command"><a href="/plugins/<%= @plugin.name %>/commands/<%= command[:name] %>"><%= command[:name] %></a></p>
+</li>
+<% end %>
+</ul>
+
+<br/>
+<h2>Helpers</h2>
+<br/>
+
+<ul>
+<% @helpers.each do |name, helper| %>
+<li>
+  <p class="helper"><a href="/plugins/<%= @plugin.name %>/helpers/<%= name %>">
+    <%= name %>
+  </a></p>
+</li>
+<% end %>
+</ul>
