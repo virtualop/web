@@ -1,0 +1,23 @@
+<div id="plugins">
+  <h1>Plugins</h1>
+
+  <h3>Core</h3>
+  <ul>
+    <%= render partial: "plugin", collection: @core %>
+  </ul>
+
+  <h3>Plugins <i class="fa fa-plus" new-plugin></i></h3>
+  <ul>
+    <%= render partial: "plugin", collection: @plugins %>
+  </ul>
+</div>
+
+<div id="new_plugin_dialog" style="display:none">
+  <h2>New Plugin</h2>
+
+  <%= form_tag("/plugins", method: "post") do %>
+    <input type="text" name="name" placeholder="plugin name" />
+    <br/>
+    <input type="submit" value="go" />
+  <% end %>
+</div>

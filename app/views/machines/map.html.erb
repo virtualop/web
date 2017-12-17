@@ -1,0 +1,55 @@
+<h2>Map</h2>
+
+<!--form id="the_form">
+  <input type="text" name="what" value="something" />
+  <input type="submit" value="go" />
+</form-->
+
+<div id="hostmap">
+  <% @hosts.each do |host| %>
+  <div class="host" id="<%= host.name.tr(".", "_") %>" data-machine="<%= host.name %>">
+    <p class="title">
+      <a href="/machines/<%= host.name %>"><%= host.name %></a>
+      <span class="toolbar">
+        <i class="fa fa-plus" data-host="<%= host.name.tr('.', '_') %>" data-machine="<%= host.name %>"></i>
+      </span>
+    </p>
+    <% if @vms[host.name] %>
+    <ul>
+      <% @vms[host.name].each do |vm| %>
+      <li class="vm" data-machine="<%= vm["full_name"] %>" data-name="<%= vm["name"] %>">
+        <div class="vm_wrapper">
+          <% installation_status = vm["installation"] ? vm["installation"].status : "finished" %>
+          <% if Installation.statuses[installation_status] > Installation.statuses["installed"] %>
+            <span title="<%= vm["readable_state"] %>" class="vm_state_indicator <%= vm["readable_state"] %>">&nbsp;</span>
+            <%= link_to vm["name"], "/machines/#{vm["full_name"]}" %>
+          <% else %>
+            <span title="<%= installation_status %>" class="vm_state_indicator <%= installation_status %>">&nbsp;</span>
+            <%= vm["name"] %> [<%= installation_status %>]
+            &nbsp;<%= vm["sidekiq"] ? sprintf("%dm", (Time.now.to_i - vm["sidekiq"]["started"].to_i) / 60) : "" %>
+          <% end %>
+          <span class="servicebar">
+            <% (vm["services"] || []).each do |service_name| %>
+              <img src="/machines/service_icon/<%= service_name %>"/>&nbsp;
+            <% end %>
+          </span>
+          <span class="toolbar" style="display: none">
+            <i class="fa fa-trash"></i>
+          </span>
+          <% if host.data["domains"] && host.data["domains"].size > 0 %>
+            <% if host.data["domains"][vm["name"]] %>
+              <div class="vm_domains">
+                <% host.data["domains"][vm["name"]].each do |domain| %>
+                  <p><%= domain %></p>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+      <% end %>
+    </ul>
+    <% end %>
+  </div>
+  <% end %>
+</div>

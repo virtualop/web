@@ -1,0 +1,7 @@
+<li>
+  <span class="mandatory"><%= command_param.options[:mandatory] ? "!" : "" %></span>
+  <span class="param_name"><%= command_param.name %></span>
+  <% if command_param.options[:description] %>
+    : <span class="description"><%= command_param.options[:description] %></span>
+  <% end %>
+</li>

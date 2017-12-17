@@ -1,0 +1,133 @@
+<h1>Machine <%= @machine.name %></h1>
+
+<p>SSH: <%= @ssh_status ? @ssh_status.result : "nil" %></p>
+
+<% if @ssh_status && @ssh_status.result %>
+<p>hostname: <%= @machine.hostname %></p>
+<p>distro: <%= @machine.distro %></p>
+<% unless @internal_ip.nil? %>
+<p>internal IP: <%= @machine.internal_ip %></p>
+<% end %>
+
+<% if @services && @services.size > 0 %>
+<h2>Services</h2>
+<p>
+  <ul>
+    <% @services.each do |service| %>
+    <li>
+      <%= service %>
+    </li>
+    <% end %>
+  </ul>
+</p>
+<% end %>
+
+<% if @vhosts && @vhosts.size > 0 %>
+  <h2>Virtual Hosts</h2>
+  <p>
+    <table id="vhosts">
+      <tbody>
+      <% @vhosts.each do |vhost| %>
+        <tr>
+          <td>
+            <div class="container">
+              <div class="led-box">
+                <div title="<%= vhost["enabled"] %>" class="<%= vhost["enabled"] ? "led-green" : "led-red" %>"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div><%= vhost["name"] %></div>
+          </td>
+          <% if vhost.data.has_key?("proxy") && vhost.data["proxy"].has_key?("host") %>
+          <td>
+            <div>&nbsp;&rarr;&nbsp;<%= vhost["proxy"]["host"] %></div>
+          </td>
+          <% elsif vhost.data.has_key? "web_root" %>
+          <td>
+            <div>&nbsp;&rarr;&nbsp;<%= vhost["web_root"] %></div>
+          </td>
+          <% elsif vhost.data.has_key? "target" %>
+          <td>
+            <div>&nbsp;&rarr;&nbsp;<%= vhost["target"] %></div>
+          </td>
+          <% end %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </p>
+<% end %>
+
+<% if @access_log %>
+  <div>
+    <% begin %>
+    <h2>Access Log</h2>
+    <p>
+      <pre><%= @access_log %></pre>
+    </p>
+    <% rescue => e %>
+    <p>could not load access log : <%= e.message %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @services.include?("libvirt.libvirt") && @machine.list_vms.map { |x| x["name"] }.include?("proxy") %>
+<h2>Domains</h2>
+<p>
+  <table id="domains">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>VM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @machine.vms_with_domains.each do |proxy| %>
+      <tr>
+        <td><%= proxy["domain"] %></td>
+        <td>
+          <% if proxy["proxy"] %>
+            <%= proxy["proxy"]["hostname"] %>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
+<% end %>
+
+<% if @packages %>
+<h2>Packages</h2>
+<p>
+  <table id="packages">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Version</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @packages.sort_by { |x| x["name"] }.each do |package| %>
+      <tr>
+        <td><%= package["name"] %></td>
+        <td>
+          <%= package["version"] %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
+<% end %>
+
+<% else # ssh_status %>
+  <% if @ssh_error.eql? "no_ssh_options" %>
+    <p>no SSH options found for <%= @machine.name %></p>
+    <a href=""
+  <% else %>
+    <p>ssh error: <%= @ssh_error %></p>
+  <% end %>
+
+<% end # ssh_status %>

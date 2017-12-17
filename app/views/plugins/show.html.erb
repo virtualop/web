@@ -1,0 +1,12 @@
+<h1>
+  <%= link_to plugins_index_path do %>
+    <i class="fa fa-level-up"></i>
+  <% end %>
+  Plugin <%= @plugin.name %>
+</h1>
+
+<h3>Commands</h3>
+
+<ul>
+  <%= render partial: "commands/command", collection: @plugin.commands.sort_by { |c| c.short_name } %>
+</ul>

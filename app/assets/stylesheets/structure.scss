@@ -1,0 +1,74 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.content-body {
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  flex: 1;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+header {
+  height: 50px;
+}
+
+#logo .helper {
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#logo .title {
+  height: 100%;
+  vertical-align: middle;
+  font-size: 24px;
+}
+
+#toolbar {
+  float: right;
+  height: 100%;
+  width: 50vw;
+  padding-right: 10px;
+}
+
+#toolbar .item {
+  float: right;
+  padding-top: 15px;
+  height: 100%;
+  display: inline-block;
+}
+
+#toolbar .item i {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#menu {
+  position: absolute;
+  top: 38px;
+  right: 10px;
+}
+
+footer {
+  padding: 5px;
+}
+
+.nav, .sidebar {
+  flex: 0 0 10em;
+}
+
+.nav {
+  order: -1;
+}

@@ -1,0 +1,16 @@
+<span id="logo">
+  <span class="helper"></span>
+  <img src="<%= image_path("dblarr_small.png") %>" />
+  <span class="title">virtualop</span>
+</span>
+
+<span id="toolbar">
+  <span class="item">
+    <a href="/machines/map"><i class="fa fa-map"></i></a>
+    <%= link_to machines_path do %>
+      <i class="fa fa-list"></i>
+    <% end %>
+    <i class="fa fa-bathtub"></i>
+    <i class="fa fa-wrench" data-toggle="menu"></i>
+  </span>
+</span>

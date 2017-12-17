@@ -1,0 +1,10 @@
+<h1>Command <%= @command.name %></h1>
+
+<h3>Parameters</h3>
+
+<ul>
+  <%= render partial: "command_param", collection: @command.params %>
+</ul>
+
+<h3>Source</h3>
+<pre class="source"><%= @source[:code] %></pre>
