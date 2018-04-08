@@ -2,13 +2,24 @@ class MachinesController < ApplicationController
 
   def index
     #@machines = $vop.machines.sort_by { |x| x.name }
-    @machines = Machine.all.sort_by { |x| x.name }
+    begin
+      @machines = Machine.all.sort_by { |x| x.name }
+    rescue
+      render text: "found a machine without a name."
+      @machines = Machine.all
+    end
     @status = {}
     @ssh_status = {}
     @metadata = {}
     @machines.each do |machine|
       test_request = Vop::Request.new($vop, "test_ssh", {"machine" => machine.name})
-      @ssh_status[machine.name] = $vop.execute_request(test_request)
+      begin
+        @ssh_status[machine.name] = $vop.execute_request(test_request)
+      rescue => e
+        response = ::Vop::Response.new(e.message, {})
+        response.status = "error"
+        @ssh_status[machine.name] = response
+      end
 
       @metadata[machine.name] = $vop.metadata(machine.name)
     end
@@ -22,17 +33,17 @@ class MachinesController < ApplicationController
   end
 
   def new_vm
-    host_name = params[:machine]
-    puts "new vm on host #{host_name}"
-
-    NewVmWorker.perform_async(host_name, params[:vm_name])
-    render text: "new machine installation has been started."
+    NewVmWorker.perform_async(params[:machine], params[:vm_name])
 
     sleep 2
 
-    $vop.invalidate_cache("command" => "list_vms", "raw_params" => {"machine" => host_name})
-    $vop.invalidate_cache("command" => "processes", "raw_params" => {"machine" => host_name})
-    $vop.invalidate_cache("command" => "vnc_ports", "raw_params" => {"machine" => host_name})
+    $vop.machines[params[:machine]].list_vms!
+
+    render text: "new machine installation has been started."
+
+    # $vop.invalidate_cache("command" => "list_vms", "raw_params" => {"machine" => host_name})
+    # $vop.invalidate_cache("command" => "processes", "raw_params" => {"machine" => host_name})
+    # $vop.invalidate_cache("command" => "vnc_ports", "raw_params" => {"machine" => host_name})
   end
 
   def delete_vm
@@ -106,7 +117,14 @@ class MachinesController < ApplicationController
   def service_icon
     puts "showing icon for service #{params[:service]}"
 
-    icon_path = $vop.list_known_services.select { |x| x["name"] == params[:service] }.first["icon"]
+    service = $vop.services.select { |x| x.name == params[:service] }.first
+
+    icon_path = File.join(service.plugin.plugin_dir("files"), service.data[:icon])
+
+    #service = $vop.list_known_services.select { |x| x["name"] == params[:service] }.first
+    #icon_path = service[:icon]
+
+    puts "icon path : #{icon_path}"
 
     if icon_path
       send_data open(icon_path, "rb") { |f| f.read }
@@ -132,43 +150,52 @@ class MachinesController < ApplicationController
       end
     end
 
-    begin
-      @internal_ip = nil
+    if @ssh_status
       begin
-        @internal_ip = @machine.internal_ip
-      rescue => e
-        puts "problem reading internal IP from #{params[:machine]} : #{e.message}"
-      end
+        @distro = @machine.distro
 
-      @services = @machine.detect_services
+        @internal_ip = nil
+        begin
+          @internal_ip = @machine.internal_ip
+        rescue => e
+          puts "problem reading internal IP from #{params[:machine]} : #{e.message}"
+        end
 
-      @vhosts = []
-      begin
-        @vhosts = @machine.vhosts
-      rescue => e
-        puts "could not load vhosts : #{e.message}"
-      end
+        @services = @machine.detect_services
 
-      begin
-        @access_log = @machine.tail_access_log(count: 25)
-      rescue => e
-        puts "could not load access log : #{e.message}"
-      end
+        if @services.include?("apache.apache")
+          @vhosts = []
+          begin
+            @vhosts = @machine.vhosts.select { |v| v["enabled"] }
+            pp @vhosts
+          rescue => e
+            puts "could not load vhosts : #{e.message}"
+          end
 
-      begin
-        @packages = @machine.list_rpm_packages
+          begin
+            @access_log = @machine.tail_access_log(count: 25)
+          rescue => e
+            puts "could not load access log : #{e.message}"
+          end
+        end
+
+        if @distro.split("_").first == "centos"
+          begin
+            @packages = @machine.list_rpm_packages
+          rescue => e
+            puts "could not load package list : #{e.message}"
+          end
+        end
       rescue => e
-        puts "could not load package list : #{e.message}"
+        puts "problem loading machine information : #{e.message}"
       end
-    rescue => e
-      puts "problem loading machine information : #{e.message}"
     end
   end
 
   def show_multi
     logger.info "showing multiple machines : #{params[:machine]}"
 
-    
+
   end
 
 end

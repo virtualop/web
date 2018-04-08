@@ -1,10 +1,9 @@
-<h2>Machines</h2>
+<h1>Machines</h1>
 
 <table id="machines">
   <thead>
     <tr>
       <th>name</th>
-      <th>first seen</th>
       <th title="the last time the machine was found by the scanner">last seen</th>
       <th>SSH</th>
       <th>metadata</th>
@@ -15,7 +14,6 @@
     <% @machines.each do |machine| %>
     <tr class="machine" id="<%= machine.name.tr(".", "_") %>">
       <td><%= link_to machine.name, "/machines/#{machine.name}" %></td>
-      <td title="<%= machine.created_at.to_formatted_s%>"><%= time_ago_in_words(machine.created_at) %> ago</td>
       <td title="<%= machine.seen_at ? machine.seen_at.to_formatted_s : "" %>"><%= machine.seen_at ? [time_ago_in_words(machine.seen_at), "ago"].join(" ") : "never" %></td>
       <td><div class="container">
         <div class="led-box">

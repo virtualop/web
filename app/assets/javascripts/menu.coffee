@@ -6,4 +6,4 @@ $ ->
 
   $("#toolbar i.fa-bathtub").click (e) ->
     $.get '/dev/reset', (data) ->
-      $('body').append "Successfully got the page."
+      $('body').append data

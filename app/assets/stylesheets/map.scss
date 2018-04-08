@@ -1,0 +1,85 @@
+// Place all the styles related to the map controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#host_map {
+  display: flex;
+  flex-direction: row;
+}
+
+
+#host_map .host {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #2B2B2B;
+  margin-bottom: 0;
+}
+
+#host_map .host .title {
+  padding: 2px;
+  text-align: center;
+  background-color: lightgray;
+  margin-bottom: 4px;
+  color: black;
+  border: 1px solid gray;
+}
+
+#host_map .host .title a,
+#host_map .host .title a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+#host_map .host .title a:hover {
+  color: white;
+}
+
+#hostnamp .host .title .toolbar {
+  float: right;
+}
+
+#host_map .vm_wrapper {
+}
+
+#host_map .vm {
+  padding: 1px;
+  border: 1px solid #222222;
+  padding: 2px;
+
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#host_map .vm:hover {
+  border: 1px solid #2B2B2B;
+}
+
+#host_map .vm_state_indicator.shut_off,
+#host_map .vm_state_indicator.failed {
+  background-color: red;
+}
+
+#host_map .vm_state_indicator.running,
+#host_map .vm_state_indicator.deployed,
+#host_map .vm_state_indicator.converted,
+#host_map .vm_state_indicator.installed,
+#host_map .vm_state_indicator.finished {
+  background-color: green;
+}
+
+#host_map .vm_state_indicator.deploying,
+#host_map .vm_state_indicator.converting,
+#host_map .vm_state_indicator.installing,
+#host_map .vm_state_indicator.base_install,
+#host_map .vm_state_indicator.started {
+  background-color: #c88700;
+}
+
+#host_map .vm .toolbar {
+  float: right;
+}
+
+#host_map .vm_domains {
+  margin-left: 8px;
+}

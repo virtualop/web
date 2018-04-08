@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+  get 'map' => 'map#index'
+  get 'map/index'
+
+  get 'map/account'
+
+  get 'map/host/:machine', to: 'map#host', machine: /[^\/]+/
+  get 'map/host_fragment/:machine', to: 'map#host_fragment', machine: /[^\/]+/
+  get 'map/group/:name', to: 'map#group'
+  post 'map/:machine/new_vm', to: 'map#new_vm', machine: /[^\/]+/
+
   get 'machines' => 'machines#index'
   get 'machines/index'
   get 'machines/:machine/delete_record', to: 'machines#delete_record', machine: /[^\/]+/

@@ -1,7 +1,7 @@
 PATH
   remote: ../vop
   specs:
-    vop (0.3.4)
+    vop (0.3.6)
       net-scp
       net-ssh
       redis
@@ -78,7 +78,6 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.6)
     libv8 (3.16.14.15)
-    libv8 (3.16.14.15-x86_64-linux)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.6)

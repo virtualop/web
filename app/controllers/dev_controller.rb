@@ -8,8 +8,7 @@ class DevController < ApplicationController
   end
 
   def reset
-    $vop.reset
-    render text: "foo"
+    render text: sprintf("reset complete, %d plugins, %d commands", *$vop.reset)
   end
 
 end

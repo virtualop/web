@@ -1,0 +1,8 @@
+<h1>Host Map : <%= params[:machine] %></h1>
+
+<div id="host_map">
+  <%= render partial: "host", locals: {
+      host: @host,
+      vms: @vms
+    } %>
+</div>

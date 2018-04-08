@@ -1,0 +1,10 @@
+<h1>Host Group : <%= @name %></h1>
+
+<div id="host_map">
+  <% @hosts.each do |h| %>
+    <%= render partial: "host", locals: {
+        host: h,
+        vms: @host_vms[h.name]
+      } %>
+  <% end %>
+</div>

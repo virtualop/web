@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 table#machines {
-  border: 1px solid #c88700;
+  /*border: 1px solid #c88700;*/
   border-collapse: separate;
 }
 
@@ -27,6 +27,25 @@ table#machines {
 #machines th,
 #machines td {
   padding: 4px;
+}
+
+#machine_view .content {
+  padding: 5px;
+}
+
+#machine_view .basic_info {
+  padding: 5px;
+}
+
+#machine_view table#processes {
+  border: 1px solid #2B2B2B;
+  background-color: #0F0F0F;
+  padding: 5px;
+}
+
+#machine_view table#processes th,
+#machine_view table#processes td {
+  padding: 5px;
 }
 
 #hostmap {

@@ -1,16 +1,20 @@
+<div id="machine_view">
 <h1>Machine <%= @machine.name %></h1>
 
-<p>SSH: <%= @ssh_status ? @ssh_status.result : "nil" %></p>
+<div class="basic_info content">
+  <p>SSH: <%= @ssh_status ? @ssh_status.result : "nil" %></p>
 
-<% if @ssh_status && @ssh_status.result %>
-<p>hostname: <%= @machine.hostname %></p>
-<p>distro: <%= @machine.distro %></p>
-<% unless @internal_ip.nil? %>
-<p>internal IP: <%= @machine.internal_ip %></p>
-<% end %>
+  <% if @ssh_status && @ssh_status.result %>
+  <p>hostname: <%= @machine.hostname %></p>
+  <p>distro: <%= @machine.distro %></p>
+  <% unless @internal_ip.nil? %>
+  <p>internal IP: <%= @machine.internal_ip %></p>
+  <% end %>
+</div>
 
 <% if @services && @services.size > 0 %>
 <h2>Services</h2>
+<div class="services content">
 <p>
   <ul>
     <% @services.each do |service| %>
@@ -20,24 +24,26 @@
     <% end %>
   </ul>
 </p>
+</div>
 <% end %>
 
 <% if @vhosts && @vhosts.size > 0 %>
-  <h2>Virtual Hosts</h2>
+<h2>Virtual Hosts</h2>
+<div class="vhosts content">
   <p>
     <table id="vhosts">
       <tbody>
       <% @vhosts.each do |vhost| %>
         <tr>
-          <td>
+          <!--td>
             <div class="container">
               <div class="led-box">
                 <div title="<%= vhost["enabled"] %>" class="<%= vhost["enabled"] ? "led-green" : "led-red" %>"></div>
               </div>
             </div>
-          </td>
+          </td-->
           <td>
-            <div><%= vhost["name"] %></div>
+            <div><%= vhost["domain"] %></div>
           </td>
           <% if vhost.data.has_key?("proxy") && vhost.data["proxy"].has_key?("host") %>
           <td>
@@ -57,23 +63,21 @@
       </tbody>
     </table>
   </p>
+</div>
 <% end %>
 
 <% if @access_log %>
-  <div>
-    <% begin %>
-    <h2>Access Log</h2>
-    <p>
-      <pre><%= @access_log %></pre>
-    </p>
-    <% rescue => e %>
-    <p>could not load access log : <%= e.message %></p>
-    <% end %>
-  </div>
+<h2>Access Log</h2>
+<div class="access_log content">
+  <p>
+    <pre><%= @access_log %></pre>
+  </p>
+</div>
 <% end %>
 
 <% if @services.include?("libvirt.libvirt") && @machine.list_vms.map { |x| x["name"] }.include?("proxy") %>
 <h2>Domains</h2>
+<div class="domains content">
 <p>
   <table id="domains">
     <thead>
@@ -96,10 +100,12 @@
     </tbody>
   </table>
 </p>
+</div>
 <% end %>
 
 <% if @packages %>
 <h2>Packages</h2>
+<div class="packages content">
 <p>
   <table id="packages">
     <thead>
@@ -120,7 +126,36 @@
     </tbody>
   </table>
 </p>
+</div>
 <% end %>
+
+<h2>Processes</h2>
+
+<div class="processes content">
+<p>
+  <p>sorted by : memory &percnt;</p>
+  <table id="processes">
+    <thead>
+      <tr>
+        <th>memory</th>
+        <th>pid</th>
+        <th>command</th>
+        <!--th>cpu</th-->
+      </tr>
+    </thead>
+    <tbody>
+      <% @machine.processes_top_mem.each do |process| %>
+      <tr>
+        <td><%= process["mem"] %></td>
+        <td><%= process["pid"] %></td>
+        <td><%= process["command"] %></td>
+        <!--td><%= process["cpu"] %></td-->
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
+</div>
 
 <% else # ssh_status %>
   <% if @ssh_error.eql? "no_ssh_options" %>
@@ -131,3 +166,4 @@
   <% end %>
 
 <% end # ssh_status %>
+</div> <!-- machine view -->
