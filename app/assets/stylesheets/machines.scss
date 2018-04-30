@@ -1,130 +1,37 @@
-// Place all the styles related to the machines controller here.
+// Place all the styles related to the Machines controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-table#machines {
-  /*border: 1px solid #c88700;*/
-  border-collapse: separate;
-}
+$border-width: 2px;
 
-#machines tr {
-  border: 1px solid #1b1b1b;
-}
-
-#machines tr:hover {
-  background-color: black;
-  border: 1px solid #c88700;
-}
-
-#machines th {
-  text-align: left;
-}
-
-#machines td {
-  padding-right: 15px;
-}
-
-#machines th,
-#machines td {
-  padding: 4px;
-}
-
-#machine_view .content {
-  padding: 5px;
-}
-
-#machine_view .basic_info {
-  padding: 5px;
-}
-
-#machine_view table#processes {
-  border: 1px solid #2B2B2B;
-  background-color: #0F0F0F;
-  padding: 5px;
-}
-
-#machine_view table#processes th,
-#machine_view table#processes td {
-  padding: 5px;
-}
-
-#hostmap {
+#machines {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#machines .machine {
+  padding: 8px;
+  margin: 8px;
+  border: $border-width solid #222;
+}
+
+#machines .machine.host {
+  font-size: larger;
 }
 
 
-#hostmap .host {
-  margin: 10px;
+
+#machine .wrapper {
   padding: 10px;
-  border: 1px solid #2B2B2B;
-  margin-bottom: 0;
 }
 
-#hostmap .host .title {
-  padding: 2px;
-  text-align: center;
-  background-color: lightgray;
-  margin-bottom: 4px;
-  color: black;
-  border: 1px solid gray;
-}
+#machine .content {
+  border: 1px solid #3B3B3B;
+  //padding-top: 0px;
+  // padding: 5px;
+  // margin: 5px;
+  padding-bottom: 15px;
+  margin-bottom: 8px;
 
-#hostmap .host .title a,
-#hostmap .host .title a:visited {
-  text-decoration: none;
-  color: black;
-}
-
-#hostmap .host .title a:hover {
-  color: white;
-}
-
-#hostnamp .host .title .toolbar {
-  float: right;
-}
-
-#hostmap .vm_wrapper {
-}
-
-#hostmap .vm {
-  padding: 1px;
-  border: 1px solid #222222;
-  padding: 2px;
-
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-#hostmap .vm:hover {
-  border: 1px solid #2B2B2B;
-}
-
-#hostmap .vm_state_indicator.shut_off,
-#hostmap .vm_state_indicator.failed {
-  background-color: red;
-}
-
-#hostmap .vm_state_indicator.running,
-#hostmap .vm_state_indicator.deployed,
-#hostmap .vm_state_indicator.converted,
-#hostmap .vm_state_indicator.installed,
-#hostmap .vm_state_indicator.finished {
-  background-color: green;
-}
-
-#hostmap .vm_state_indicator.deploying,
-#hostmap .vm_state_indicator.converting,
-#hostmap .vm_state_indicator.installing,
-#hostmap .vm_state_indicator.base_install,
-#hostmap .vm_state_indicator.started {
-  background-color: #c88700;
-}
-
-#hostmap .vm .toolbar {
-  float: right;
-}
-
-#hostmap .vm_domains {
-  margin-left: 8px;
+  //width: 400px;
 }

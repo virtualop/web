@@ -13,15 +13,9 @@
     <li class="vm" data-machine="<%= vm["full_name"] %>" data-name="<%= vm["name"] %>">
       <div class="vm_wrapper">
         <% installation_status = vm["installation"] ? vm["installation"].status : "finished" %>
-        <% if Installation.statuses[installation_status] > Installation.statuses["installed"] %>
-          <span title="<%= vm["readable_state"] %>" class="vm_state_indicator <%= vm["readable_state"] %>">&nbsp;</span>
-          <%= link_to vm["name"], "/machines/#{vm["full_name"]}" %>
-          [<%= installation_status %>, <%= vm["install"] %>]
-        <% else %>
-          <span title="<%= installation_status %>" class="vm_state_indicator <%= installation_status %>">&nbsp;</span>
-          <%= vm["name"] %> [<%= installation_status %>]
-          &nbsp;<%= vm["sidekiq"] ? sprintf("%dm", (Time.now.to_i - vm["sidekiq"]["started"].to_i) / 60) : "" %>
-        <% end %>
+        <span title="<%= vm["readable_state"] %>" class="vm_state_indicator <%= vm["readable_state"] %>">&nbsp;</span>
+        <%= link_to vm["name"], "/machines/#{vm["full_name"]}" %>
+        <!-- [<%= installation_status %>, <%= vm["install"] %>] -->
         <span class="servicebar">
           <% (vm["services"] || []).each do |service_name| %>
             <img src="/machines/service_icon/<%= service_name %>"/>&nbsp;

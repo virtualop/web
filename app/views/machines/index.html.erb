@@ -1,28 +1,11 @@
 <h1>Machines</h1>
 
-<table id="machines">
-  <thead>
-    <tr>
-      <th>name</th>
-      <th title="the last time the machine was found by the scanner">last seen</th>
-      <th>SSH</th>
-      <th>metadata</th>
-      <th>actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @machines.each do |machine| %>
-    <tr class="machine" id="<%= machine.name.tr(".", "_") %>">
-      <td><%= link_to machine.name, "/machines/#{machine.name}" %></td>
-      <td title="<%= machine.seen_at ? machine.seen_at.to_formatted_s : "" %>"><%= machine.seen_at ? [time_ago_in_words(machine.seen_at), "ago"].join(" ") : "never" %></td>
-      <td><div class="container">
-        <div class="led-box">
-          <div title="<%= @ssh_status[machine.name].timestamp %>" class="<%= @ssh_status[machine.name].result ? "led-green" : "led-red" %>"></div>
-        </div>
-      </div></td>
-      <td><%= @metadata[machine.name].size %></td>
-      <td><i class="fa fa-trash" data-machine="<%= machine.name %>"></i></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<div id="machines">
+  <% @machines.each do |machine| %>
+    <div class="machine <%= machine.metadata["type"] %>">
+      <%= link_to "/machines/#{machine.name}" do %>
+        <span class="name"><%= machine.name %></span>
+      <% end %>
+    </div>
+  <% end %>
+</div>

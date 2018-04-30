@@ -1,18 +1,23 @@
 require 'test_helper'
 
-class MapControllerTest < ActionController::TestCase
+class MapControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
-    get :index
+    get map_index_url
     assert_response :success
   end
 
-  test "should get account" do
-    get :account
+  test "should get group" do
+    get map_group_url
     assert_response :success
   end
 
   test "should get host" do
-    get :host
+    get map_host_url
+    assert_response :success
+  end
+
+  test "should get host_fragment" do
+    get map_host_fragment_url
     assert_response :success
   end
 

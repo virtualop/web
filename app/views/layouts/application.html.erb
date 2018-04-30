@@ -1,29 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>vop</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <%= stylesheet_link_tag    "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-  <%= favicon_link_tag %>
-  <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">   
-</head>
-<body>
-  <header>
-    <%= render partial: "header" %>
-  </header>
-  <div class="content-body">
-    <main class="content" role="main">
-      <%= render partial: "messages" %>
-      <%= yield %>
-    </main>
-    <!--nav class="nav">some navigation?</nav>
-    <aside class="sidebar">we want no ads</aside-->
-  </div>
-  <footer>v <%= Vop::VERSION %></footer>
-  <div id="menu" style="display: none">
-    <%= render partial: "menu" %>
-  </div>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>vop</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= favicon_link_tag %>
+  </head>
+
+  <body>
+    <header>
+      <%= render partial: "header" %>
+    </header>
+    <div class="content-body">
+      <main class="content" role="main">
+        <%= render partial: "messages" %>
+        <%= yield %>
+      </main>
+      <!--nav class="nav">some navigation?</nav>
+      <aside class="sidebar">we want no ads</aside-->
+    </div>
+    <footer>v <%= Vop::VERSION %></footer>
+    <div id="menu" style="display: none">
+      <%= render partial: "menu" %>
+    </div>
+  </body>
 </html>

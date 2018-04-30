@@ -1,6 +1,7 @@
 {
   "name": "dsl-generated-dependencies",
   "dependencies": {
-    "font-awesome": "latest"
+    "font-awesome": "latest",
+    "lato": "https://google-fonts.azurewebsites.net/googleFonts/lato?family=Lato"
   }
 }
