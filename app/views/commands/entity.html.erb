@@ -1,0 +1,10 @@
+<h1>Entity
+  <%= link_to @plugin_name, "/plugins/#{@plugin_name}" %>.<%= link_to @entity.short_name, "/commands/entity/#{@entity.name}" %>
+</h1>
+
+<div class="section">
+  <h2>Source</h2>
+  <div class="source_wrap">
+    <pre class="source"><%= @source[:code] %></pre>
+  </div>
+</div>
