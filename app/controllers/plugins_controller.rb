@@ -13,6 +13,10 @@ class PluginsController < ApplicationController
   def show
     $logger.info "showing #{params[:plugin]}"
     @plugin = $vop.plugin(params[:plugin])
+
+    @entities = $vop.entities.values.select do |entity|
+      entity.plugin.name == params[:plugin]
+    end
   end
 
   def create

@@ -1,6 +1,6 @@
 <h1>
   <%= link_to plugins_index_path do %>
-    <i class="fa fa-level-up"></i>
+    <i class="fa fa-level-up-alt"></i>
   <% end %>
   Plugin <%= @plugin.name %>
 </h1>
@@ -10,3 +10,18 @@
 <ul>
   <%= render partial: "commands/command", collection: @plugin.commands.sort_by { |c| c.short_name } %>
 </ul>
+
+<% if @entities.size > 0 %>
+<h3>Entities</h3>
+
+<ul>
+  <% @entities.each do |entity| %>
+  <li>
+    <%= link_to "/commands/entity/#{entity.name}" do %>
+      <%= entity.short_name %>
+    <% end %>
+  </li>
+  <% end %>
+</ul>
+
+<% end %>

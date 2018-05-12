@@ -2,6 +2,23 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.section {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.source_wrap,
+.param_wrap,
+.contributor_wrap {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.source_wrap {
+  margin-right: 20px;
+}
+
 pre.source {
   padding: 4px;
+  color: #a5a5a5;
 }

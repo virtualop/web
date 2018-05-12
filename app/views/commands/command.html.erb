@@ -1,10 +1,32 @@
-<h1>Command <%= @command.name %></h1>
+<h1>Command
+  <%= link_to @plugin_name, "/plugins/#{@plugin_name}" %>.<%= link_to @command.short_name, "/commands/#{@command.name}" %>
+</h1>
 
-<h3>Parameters</h3>
+<div class="section">
+  <h2>Parameters</h2>
+  <div class="param_wrap">
+    <ul>
+      <%= render partial: "command_param", collection: @command.params %>
+    </ul>
+  </div>
+</div>
 
-<ul>
-  <%= render partial: "command_param", collection: @command.params %>
-</ul>
+<div class="section">
+  <h2>Source</h2>
+  <div class="source_wrap">
+    <pre class="source"><%= @source[:code] %></pre>
+  </div>
+</div>
 
-<h3>Source</h3>
-<pre class="source"><%= @source[:code] %></pre>
+<% if @contributors && @contributors.size > 0 %>
+<div class="section">
+  <h2>Contributors</h2>
+  <div class="contributor_wrap">
+  <% @contributors.each do |contributor| %>
+    <div>
+      <%= link_to contributor.split(".").last, "/commands/#{contributor}" %>
+    </div>
+  <% end %>
+  </div>
+</div>
+<% end %>

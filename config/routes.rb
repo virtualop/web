@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   get 'commands/index'
   get 'commands' => 'commands#index'
+  get 'commands/entity/:entity' => 'commands#entity', entity: /[^\/]+/
   get 'commands/:command' => 'commands#command', command: /[^\/]+/
 
   get 'dev' => 'dev#index'
