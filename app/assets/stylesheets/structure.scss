@@ -1,12 +1,24 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
+  // display: flex;
+  // min-height: 100vh;
+  // flex-direction: column;
+}
+
+#burrito {
+  height: 100%;
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
 }
 
 .content-body {
   display: flex;
   flex: 1;
+  overflow: auto;
 }
 
 .content {
@@ -63,6 +75,7 @@ header {
 
 footer {
   padding: 5px;
+  // height: 30px;
 }
 
 .nav, .sidebar {

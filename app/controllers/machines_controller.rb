@@ -7,6 +7,8 @@ class MachinesController < ApplicationController
     @machine = $vop.machines[params[:machine]]
     @ssh_status = @machine.test_ssh
     @scan = @machine.scan_result
+
+    @services = @scan["services"]
   end
 
   def new

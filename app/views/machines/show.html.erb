@@ -41,6 +41,23 @@
   </div>
   <% end %>
 
+  <% if @services && @services.include?("apache.apache") %>
+  <div class="row">
+    <div id="vhosts" class="wrapper col col-4">
+      <div class="content">
+        <h2>VHosts</h2>
+        <ul>
+          <% @machine.vhosts.each do |vhost| %>
+          <li>
+            <%= vhost.name %>
+          <li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <% end %>
+
   <% if @scan["packages"] && @scan["packages"].size > 0 %>
   <div class="row">
     <div id="package" class="wrapper col col-4">

@@ -13,18 +13,20 @@
   </head>
 
   <body>
-    <header>
-      <%= render partial: "header" %>
-    </header>
-    <div class="content-body">
-      <main class="content" role="main">
-        <%= render partial: "messages" %>
-        <%= yield %>
-      </main>
-      <!--nav class="nav">some navigation?</nav>
-      <aside class="sidebar">we want no ads</aside-->
+    <div id="burrito">
+      <header>
+        <%= render partial: "header" %>
+      </header>
+      <div class="content-body">
+        <main class="content" role="main">
+          <%= render partial: "messages" %>
+          <%= yield %>
+        </main>
+        <!--nav class="nav">some navigation?</nav>
+        <aside class="sidebar">we want no ads</aside-->
+      </div>
+      <footer>v <%= Vop::VERSION %></footer>
     </div>
-    <footer>v <%= Vop::VERSION %></footer>
     <div id="menu" style="display: none">
       <%= render partial: "menu" %>
     </div>
