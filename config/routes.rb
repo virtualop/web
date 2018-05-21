@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   get 'machines' => 'machines#index'
   get 'machines/index'
+  get 'machines/scan/:machine', to: 'machines#scan', machine: /[^\/]+/
+  get 'machines/show/:machine', to: 'machines#show', machine: /[^\/]+/
+  # deprecated:
   get 'machines/:machine', to: 'machines#show', machine: /[^\/]+/
 
   post 'machines/new'
@@ -50,5 +53,6 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
+  root to: 'machines#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

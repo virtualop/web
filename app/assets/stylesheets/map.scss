@@ -75,7 +75,15 @@
   background-color: #c88700;
 }
 
+#host_map .host .toolbar {
+  float: right;
+}
+
 #host_map .vm .toolbar {
+  float: right;
+}
+
+#host_map .vm .servicebar .service {
   float: right;
 }
 

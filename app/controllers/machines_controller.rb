@@ -27,4 +27,10 @@ class MachinesController < ApplicationController
       send_data open("#{Rails.root}/public/blank.png", "rb") { |f| f.read }
     end
   end
+
+  def scan
+    $vop.inspect_async(params[:machine]).to_json
+    render json: {status: "scan has been scheduled"}.to_json
+  end
+
 end
