@@ -1,4 +1,5 @@
 class MachinesController < ApplicationController
+
   def index
     @machines = $vop.machines.sort_by(&:name)
   end
@@ -6,9 +7,13 @@ class MachinesController < ApplicationController
   def show
     @machine = $vop.machines[params[:machine]]
     @ssh_status = @machine.test_ssh
-    @scan = @machine.scan_result
 
+    @scan = @machine.scan_result
     @services = @scan["services"]
+
+    @domains = @machine.vhosts.select do |vhost|
+      ! vhost["domain"].nil?
+    end
   end
 
   def new

@@ -50,6 +50,9 @@ Rails.application.routes.draw do
   get 'dev/index'
   get 'dev/reset'
 
+  get 'log' => 'log#index'
+  get 'log/index'
+
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
