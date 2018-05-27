@@ -11,8 +11,12 @@ class MachinesController < ApplicationController
     @scan = @machine.scan_result
     @services = @scan["services"]
 
-    @domains = @machine.vhosts.select do |vhost|
-      ! vhost["domain"].nil?
+    if @services && @services.include?("apache.apache")
+      @domains = @machine.vhosts.select do |vhost|
+        ! vhost["domain"].nil?
+      end
+    else
+      @domains = []
     end
   end
 

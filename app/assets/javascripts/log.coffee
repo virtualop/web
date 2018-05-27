@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$ ->
+App.listen_for_vop_log = ->
   console.log "starting to listen for vop_log"
   App.vopLogChannel = App.cable.subscriptions.create { channel: "VopLogChannel" },
     received: (json_data) ->
@@ -17,4 +17,7 @@ $ ->
         params.html(JSON.stringify(data["params"]))
 
       newDiv = $("<div/>").html(command.html() + params.html())
-      $("#log").append(newDiv)
+      newDiv.addClass("command")
+      newDiv.addClass("level-" + data["level"])
+      newDiv.css("margin-left", data["level"] * 2 + "px")
+      $("#log").prepend(newDiv)
