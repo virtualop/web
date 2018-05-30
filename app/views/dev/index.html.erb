@@ -1,7 +1,34 @@
-<h1>dev</h1>
+<div id="dev-wrap">
+  <h1>dev</h1>
 
-<% @working_copies.each do |path| %>
-  <div class="working_copy">
-    <span class="title"><%= path %></span>
+  <div id="detail-window-template" style="display:none">
+    <span class="title">Changes:</span>
+    <span class="buttons">
+      <button class="button btn-xs btn-dark detail-close-button">x</button>
+    </span>
   </div>
-<% end %>
+
+  <% @working_copies.each do |working_copy| %>
+  <div class="working-copy-wrap">
+    <div class="working-copy">
+      <span class="title"><%= working_copy[:name] %></span>
+      <span class="buttons">
+        <button
+          class="button btn-xs changes-button"
+          data-remote="true"
+          data-url="/dev/git_status/<%= working_copy[:name] %>"
+          data-working-copy="<%= working_copy[:html_name] %>"
+        ><%= @changes[working_copy[:name]].size %></button>
+        <button
+          class="button btn-xs btn-primary pull-button"
+          data-remote="true"
+          data-url="/dev/git_pull/<%= working_copy[:name] %>"
+        >pull</button>
+      </span>
+    </div>
+    <div id="working-copy-detail-<%= working_copy[:html_name] %>" class="working-copy-detail">
+
+    </div>
+  </div>
+  <% end %>
+</div>
