@@ -1,16 +1,8 @@
 <div id="dev-wrap">
   <h1>dev</h1>
 
-  <div id="detail-window-template" style="display:none">
-    <span class="title">Changes:</span>
-    <span class="buttons">
-      <button class="button btn-xs btn-dark detail-close-button">x</button>
-    </span>
-  </div>
-
   <% @working_copies.each do |working_copy| %>
-  <div class="working-copy-wrap">
-    <div class="working-copy">
+    <div class="working-copy" data-name="<%= working_copy[:name] %>">
       <span class="title"><%= working_copy[:name] %></span>
       <span class="buttons">
         <button
@@ -26,9 +18,27 @@
         >pull</button>
       </span>
     </div>
-    <div id="working-copy-detail-<%= working_copy[:html_name] %>" class="working-copy-detail">
+    <div id="working-copy-detail-<%= working_copy[:html_name] %>"
+      class="working-copy-detail"
+      data-name="<%= working_copy[:name] %>"
+      data-mode="status">
+      <div class="header">
+        <span class="title">Changes:</span>
+        <span class="buttons">
+          <!--button class="button btn-xs btn-dark btn-icon refresh-button">
+            <i class="fa fa-sync"></i>
+          </button-->
+          <button class="button btn-xs btn-dark btn-icon switch-to-diff-button">
+            <i class="fa fa-search"></i>
+          </button>
+          <button class="button btn-xs btn-dark btn-icon detail-close-button">
+            <i class="fa fa-times"></i>
+          </button>
+        </span>
+      </div>
+      <div class="content">
 
+      </div>
     </div>
-  </div>
   <% end %>
 </div>

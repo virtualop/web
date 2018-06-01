@@ -5,12 +5,12 @@ class DevController < ApplicationController
   end
 
   def index
-
     vop_root = "#{ENV["HOME"]}/projects/virtualop"
 
     @working_copy_names = %w|vop plugins services web|
     @working_copies = @working_copy_names.map do |x|
-      hash = { name: x,
+      hash = {
+        name: x,
         path: "#{vop_root}/#{x}",
       }
       hash[:html_name] = hash[:path].gsub("/", "-")
@@ -20,7 +20,7 @@ class DevController < ApplicationController
     @changes = {}
     @working_copies.each do |working_copy|
       name = working_copy[:name]
-      @changes[name] = $vop.git_status(machine: "localhost", "working_copy" => working_copy[:path])
+      @changes[name] = $vop.git_status!(machine: "localhost", "working_copy" => working_copy[:path])
     end
 
     #flash.now[:notice] = "beeblebrox!"
@@ -33,7 +33,11 @@ class DevController < ApplicationController
   end
 
   def git_status
-    result = $vop.git_status(machine: "localhost", "working_copy" => working_copy_path())
+    p = {
+      machine: "localhost",
+      "working_copy" => working_copy_path()
+    }
+    result = $vop.git_status(p)
     render json: result.to_json()
   end
 
