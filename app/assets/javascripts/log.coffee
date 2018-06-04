@@ -20,4 +20,7 @@ App.listen_for_vop_log = ->
       newDiv.addClass("command")
       newDiv.addClass("level-" + data["level"])
       newDiv.css("margin-left", data["level"] * 2 + "px")
-      $("#log").prepend(newDiv)
+      $("#log").append(newDiv)
+      h = $("#log").height()
+      console.log("#log div height now : " + h)
+      $(".content-body").first().scrollTop(h)
