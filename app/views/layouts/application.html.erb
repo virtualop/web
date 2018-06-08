@@ -25,7 +25,9 @@
         <!--nav class="nav">some navigation?</nav>
         <aside class="sidebar">we want no ads</aside-->
       </div>
-      <footer>v <%= Vop::VERSION %></footer>
+      <footer>
+        <%= render partial: "footer" %>
+      </footer>
     </div>
     <div id="menu" style="display: none">
       <%= render partial: "menu" %>

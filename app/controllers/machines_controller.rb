@@ -21,6 +21,11 @@ class MachinesController < ApplicationController
   end
 
   def new
+    $logger.info "new machine #{params[:vm_name]} on #{params[:host_name]}"
+
+    request = ::Vop::Request.new $vop, "new_machine",
+      {"machine" => params[:host_name], "name" => params[:vm_name]}
+    $vop.execute_async(request)
   end
 
   def delete

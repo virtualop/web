@@ -20,7 +20,12 @@ class DevController < ApplicationController
     @changes = {}
     @working_copies.each do |working_copy|
       name = working_copy[:name]
-      @changes[name] = $vop.git_status!(machine: "localhost", "working_copy" => working_copy[:path])
+
+      coordinates = {
+        machine: "localhost", "working_copy" => working_copy[:path]
+      }
+      @changes[name] = $vop.git_status(coordinates)
+      working_copy[:current_revision] = $vop.current_revision(coordinates)
     end
 
     #flash.now[:notice] = "beeblebrox!"
@@ -42,7 +47,11 @@ class DevController < ApplicationController
   end
 
   def git_diff
-    result = $vop.git_diff(machine: "localhost", "working_copy" => working_copy_path())
+    result = $vop.git_diff(
+      machine: "localhost",
+      "working_copy" => working_copy_path(),
+      "path_fragment" => params[:file] || ""
+    )
     render plain: result
   end
 

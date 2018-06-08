@@ -11,8 +11,18 @@
 
     border: 1px solid black;
 
-    max-width: 600px;
+    // max-width: 600px;
     background-color: #444;
+
+    .title {
+      font-size: larger;
+    }
+
+    .change .detail pre {
+      font-size: smaller;
+      margin-top: 10px;
+    }
+
   }
 
   .working-copy-detail {
@@ -20,7 +30,7 @@
     display: none;
     padding: 10px;
 
-    max-width: 600px;
+    // max-width: 600px;
 
     .header {
       padding-top: 5px;

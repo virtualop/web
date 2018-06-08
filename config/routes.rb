@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   get 'dev/index'
   get 'dev/reset'
   get 'dev/git_pull/:working_copy' => 'dev#git_pull'
-  get 'dev/git_diff/:working_copy' => 'dev#git_diff'
+  get 'dev/git_diff/:working_copy(/:file)' => 'dev#git_diff', file: /.+/
   get 'dev/git_status/:working_copy' => 'dev#git_status'
 
   get 'log' => 'log#index'

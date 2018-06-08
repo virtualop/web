@@ -19,4 +19,10 @@ class VopLogChannel < ApplicationCable::Channel
     end
   end
 
+  def unsubscribed
+    @redis.unsubscribe("vop_log")
+
+    stop_all_streams
+  end
+
 end

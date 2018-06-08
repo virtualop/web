@@ -1,3 +1,5 @@
+require "benchmark"
+
 class MapController < ApplicationController
   def index
   end
@@ -33,11 +35,14 @@ class MapController < ApplicationController
     logger.info "host map : #{host.name}"
 
     vms_with_domains = []
-    begin
-      vms_with_domains = host.vms_with_domains
-    rescue => e
-      $logger.warn "cannot load vms_with_domains : #{e.message}"
+    benchmark = Benchmark.measure do
+      begin
+        vms_with_domains = host.vms_with_domains
+      rescue => e
+        $logger.warn "cannot load vms_with_domains : #{e.message}"
+      end
     end
+    pp benchmark
 
     vms = host.list_vms.sort_by { |row| row["name"] }
     vms.map do |vm|

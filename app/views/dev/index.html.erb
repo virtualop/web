@@ -4,6 +4,8 @@
   <% @working_copies.each do |working_copy| %>
     <div class="working-copy" data-name="<%= working_copy[:name] %>">
       <span class="title"><%= working_copy[:name] %></span>
+      <span class="revision"><%= working_copy[:current_revision][:revision][0..7] %></span>
+      <span class="revision_title"><%= working_copy[:current_revision][:title][0..49] %></span>
       <span class="buttons">
         <button
           class="button btn-xs changes-button"

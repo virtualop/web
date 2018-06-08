@@ -4,9 +4,14 @@ detailWindow = (event) ->
     .next(".working-copy-detail")
 
 addChange = (change, target) ->
-  status = $("<span />").html(change.raw)
-  path = $("<span />").html(change.path)
-  changeDiv = $("<div />").html(status.html() + path.html())
+  titleDiv = $("<div />").addClass("title")
+    .append $("<span />").html(change.raw)
+    .append $("<span />").html(change.path)
+  detailDiv = $("<div />").addClass("detail")
+  changeDiv = $("<div />").addClass("change")
+    .data("path", change.path)
+    .append titleDiv
+    .append detailDiv
   $(target).append(changeDiv)
 
 $ ->
@@ -25,6 +30,17 @@ $ ->
   $("#dev-wrap").on "click", ".detail-close-button", (event) ->
     [data, status, xhr] = event.detail
     $(event.currentTarget).closest(".working-copy-detail").hide()
+
+  $("#dev-wrap").on "click", ".change .title", (event) ->
+    change = $(event.currentTarget).closest(".change")
+    path = change.data("path")
+    console.log("path", path)
+    diff_url = "/dev/git_diff/" + detailWindow.data("name") + "/" + path
+    $.get diff_url, (data) ->
+      pre = $("<pre />").html(data)
+      console.log("diff", data)
+      detail = change.find(".detail").first()
+      detail.append(pre)
 
   $("#dev-wrap").on "click", ".switch-to-diff-button", (event) ->
     console.log("detail visible?", detailWindow.is(':visible'))
