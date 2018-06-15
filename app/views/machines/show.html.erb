@@ -15,7 +15,7 @@
           <span class="last_span"><%= @scan["scan_from"] ? time_ago_in_words(@scan["scan_from"]) + " ago" : "never" %></span>
           &nbsp;
           <span class="scan_button" data-machine="<%= @machine.name %>">
-            <input type="button" value="scan" />
+            <button class="btn btn-xs btn-primary">scan</button>
           </span>
         </p>
 
@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <div id="memory" class="wrapper col col-8">
+    <div id="memory" class="wrapper col col-4">
       <div class="content">
         <h2>Memory</h2>
 
@@ -52,6 +52,43 @@
 
       </div>
     </div>
+
+    <div id="disk" class="wrapper col col-4">
+      <div class="content">
+        <h2>Disk</h2>
+
+        <table>
+          <thead>
+            <% %w|mount size full free progress|.each do |col| %>
+              <td><%= col %></td>
+            <% end %>
+          </thead>
+          <tbody>
+          <% @machine.disk_free.each do |row|
+              full = row[:full].split("%").first.to_i
+          %>
+          <tr>
+            <td><%= row[:mount_point][0..63] %></td>
+            <td><%= row[:size] %></td>
+            <td><%= row[:full] %></td>
+            <td><%= row[:free] %></td>
+            <td>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                  style="width: <%= full %>%"
+                  aria-valuenow="<%= full %>"
+                  aria-valuemin="0" aria-valuemax="100">
+                  <span class="progress-text" role="title" title="<%= full %>% full"><%= full %>%</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
   <% if @scan["services"] && @scan["services"].size > 0 %>
@@ -104,4 +141,8 @@
     </div>
   </div>
   <% end %>
+
+  <!--button id="add-service" class="btn btn-primary">
+    add service
+  </button-->
 </div>
