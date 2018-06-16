@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   delete 'machines/delete'
 
   get 'machines/service_icon/:service', to: 'machines#service_icon', service: /[^\/]+/
+  get 'machines/service_params/:service', to: 'machines#service_params', service: /[^\/]+/
+
+  post 'machines/install_service', to: 'machines#install_service'
 
   # get 'machines' => 'machines#index'
   # get 'machines/index'

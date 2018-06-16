@@ -14,7 +14,7 @@
         <p>Last Scan:
           <span class="last_span"><%= @scan["scan_from"] ? time_ago_in_words(@scan["scan_from"]) + " ago" : "never" %></span>
           &nbsp;
-          <span class="scan_button" data-machine="<%= @machine.name %>">
+          <span class="scan-button" data-machine="<%= @machine.name %>">
             <button class="btn btn-xs btn-primary">scan</button>
           </span>
         </p>
@@ -142,7 +142,51 @@
   </div>
   <% end %>
 
-  <!--button id="add-service" class="btn btn-primary">
+  <button id="add-service" class="btn btn-primary" data-toggle="modal" data-target="#addServiceModal">
     add service
-  </button-->
+  </button>
+
+  <div class="modal fade" id="addServiceModal" tabindex="-1" role="dialog" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addServiceModalLabel">Add Service</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <button type="button" id="dropdownMenuButton"
+                class="btn btn-secondary dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false"
+              >select service</button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <% @installables.each do |installable| %>
+                  <a class="dropdown-item" href="#"><%= installable.name %></a>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <!--h6>Parameters:</h6-->
+              <form>
+                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token.to_s %>" />
+                <input type="hidden" name="machine" value="<%= @machine.name %>" />
+                <input type="hidden" class="service" name="service" />
+                <div class="params container"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary add-service-button">Install</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

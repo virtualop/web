@@ -23,13 +23,14 @@
     <div id="working-copy-detail-<%= working_copy[:html_name] %>"
       class="working-copy-detail"
       data-name="<%= working_copy[:name] %>"
+      data-path="<%= working_copy[:path] %>"
       data-mode="status">
       <div class="header">
         <span class="title">Changes:</span>
         <span class="buttons">
-          <!--button class="button btn-xs btn-dark btn-icon refresh-button">
+          <button class="button btn-xs btn-dark btn-icon refresh-button">
             <i class="fa fa-sync"></i>
-          </button-->
+          </button>
           <button class="button btn-xs btn-dark btn-icon switch-to-diff-button">
             <i class="fa fa-search"></i>
           </button>

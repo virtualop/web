@@ -2,10 +2,42 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+addParam = (param) ->
+  console.log("adding param ", param)
+  label_span = $('<span class="label" />').append(param.name + " : ")
+  input_span = $('<span class="input_wrap"><input type="text" name="' + param.name + '" /></span>')
+  param_div = $('<div class="param" />')
+    .append(label_span)
+    .append(input_span)
+  $("#addServiceModal .params.container").append(param_div)
+
 $ ->
-  $(".scan_button").click (event) ->
+  $(".scan-button").click (event) ->
     console.log("scan button clicked", event)
     machine = event.currentTarget.dataset["machine"]
     console.log("machine", machine)
     $.get "/machines/scan/" + machine, (data) ->
       console.log("scan initiated")
+
+  $("#addServiceModal").on "show.bs.modal", (event) ->
+    console.log("showing service modal", event)
+    $("#addServiceModal #dropdownMenuButton").text("select service")
+    $("#addServiceModal .params.container").html("")
+
+  $("#addServiceModal .dropdown-menu .dropdown-item").click (event) ->
+    serviceName = event.currentTarget.text
+    console.log("service dropdown item clicked", serviceName)
+
+    $("#addServiceModal #dropdownMenuButton").text(serviceName)
+    $("#addServiceModal form input.service").val(serviceName)
+
+    $("#addServiceModal .params.container").html("")
+    $.get "/machines/service_params/" + serviceName, (data) ->      
+      addParam(param) for param in data
+
+  $(".add-service-button").click (event) ->
+    serialized = $("#addServiceModal form").serialize()
+    $.post "/machines/install_service", serialized, (data) ->
+      console.log("service installation initialized.", data)
+
+    $("#addServiceModal").modal("hide")

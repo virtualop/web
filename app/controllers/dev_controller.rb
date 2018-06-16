@@ -42,7 +42,13 @@ class DevController < ApplicationController
       machine: "localhost",
       "working_copy" => working_copy_path()
     }
-    result = $vop.git_status(p)
+
+    result = if params[:refresh]
+      $vop.git_status!(p)
+    else
+      $vop.git_status(p)
+    end
+
     render json: result.to_json()
   end
 

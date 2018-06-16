@@ -18,6 +18,10 @@ class MachinesController < ApplicationController
     else
       @domains = []
     end
+
+    @installables = $vop.services
+      .delete_if { |x| @services && @services.include?(x.name) }
+      .sort_by { |x| x.name }
   end
 
   def new
@@ -40,6 +44,28 @@ class MachinesController < ApplicationController
     else
       send_data open("#{Rails.root}/public/blank.png", "rb") { |f| f.read }
     end
+  end
+
+  def service_params
+    service = $vop.services.select { |x| x.name == params[:service] }.first
+
+    render json: service.data["params"].to_json()
+  end
+
+  def install_service
+    service = $vop.services.select { |x| x.name == params[:service] }.first
+    puts "installing service #{params[:service]} on #{params[:machine]}"
+
+    # pass on all params except these
+    blacklist = %w|authenticity_token controller action|
+    p = {}
+    params.each do |k,v|
+      unless blacklist.include? k
+        p[k] = v
+      end
+    end
+
+    $vop.install_service_async(p)
   end
 
   def scan

@@ -7,30 +7,45 @@ $border-width: 2px;
 #machines {
   display: flex;
   flex-wrap: wrap;
+
+  .machine {
+    padding: 8px;
+    margin: 8px;
+    border: $border-width solid #222;
+  }
+
+  .machine.host {
+    font-size: larger;
+  }
+
 }
 
-#machines .machine {
-  padding: 8px;
-  margin: 8px;
-  border: $border-width solid #222;
+#machine {
+
+  .wrapper {
+    padding: 10px;
+  }
+
+  .content {
+    border: 1px solid #3B3B3B;
+    padding-bottom: 15px;
+
+    margin-bottom: 8px;
+  }
+
+  .row table td {
+    padding: 5px;
+  }
+
+  .scan-button button {
+    padding: 2px;
+    line-height: normal;
+  }
+
 }
 
-#machines .machine.host {
-  font-size: larger;
-}
+#addServiceModal .params.container {
 
+  margin-top: 15px;
 
-
-#machine .wrapper {
-  padding: 10px;
-}
-
-#machine .content {
-  border: 1px solid #3B3B3B;
-  padding-bottom: 15px;
-  margin-bottom: 8px;
-}
-
-#machine #memory table td {
-  padding: 5px;
 }
