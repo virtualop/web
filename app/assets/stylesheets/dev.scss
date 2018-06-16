@@ -11,7 +11,6 @@
 
     border: 1px solid black;
 
-    // max-width: 600px;
     background-color: #444;
 
     .title {
@@ -30,15 +29,19 @@
     display: none;
     padding: 10px;
 
-    // max-width: 600px;
-
     .header {
       padding-top: 5px;
       padding-bottom: 5px;
     }
 
-    pre {
-      color: white;
+    .diff-wrap {
+      padding: 10px;
+
+      pre {
+        margin: 5px;
+        color: white;
+        font-size: smaller;
+      }
     }
 
   }
