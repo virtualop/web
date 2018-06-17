@@ -65,7 +65,7 @@ class DevController < ApplicationController
     $vop.commit_changes(
       machine: "localhost",
       "working_copy" => working_copy_path,
-      "file" => params[:files]
+      "file" => params[:file]
     )
   end
 

@@ -82,7 +82,7 @@ $ ->
     files.html("")
     $(detail).find(".change input[type=checkbox]:checked").each (idx, value) ->
       console.log("path", $(value).data("path"))
-      files.append $('<input type="text" name="file" value="' + $(value).data("path") + '" />')
+      files.append $('<input type="text" name="file[]" value="' + $(value).data("path") + '" />')
 
 
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
