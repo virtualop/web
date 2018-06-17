@@ -30,6 +30,8 @@ processChanges = (detail, data) ->
   console.log("updating changes button", changesButton)
   changesButton.html(data.length)
 
+  detail.find(".selection-buttons").hide()
+
 
 $ ->
   $("#dev-wrap .pull-button").on "ajax:success", (event) ->
@@ -84,25 +86,10 @@ $ ->
       console.log("path", $(value).data("path"))
       files.append $('<input type="text" name="file[]" value="' + $(value).data("path") + '" />')
 
-
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
     console.log("submitting", $("#commitModal form"))
     $("#commitModal form").submit()
+    $("#commitModal").modal("hide")
 
-    # detail = $(event.currentTarget).closest(".working-copy-detail")
-    # console.log("detail", detail)
-    # console.log("name", detail.data("name"))
-    # payload =
-    #   authenticity_token: $('meta[name="csrf-token"]').attr("content")
-    #   working_copy: $(detail).data("name")
-    #   comment: $("#commitModal textarea#comment").val()
-    #   files: []
-    #
-    # $(detail).find(".change input[type=checkbox]:checked").each (idx, value) ->
-    #   console.log("file", value)
-    #   console.log("path", $(value).data("path"))
-    #   payload.files.push($(value).data("path"))
-    #
-    # console.log("payload", payload)
-    # $.post "/dev/commit", payload, (data) ->
-    #   console.log("commit result", data)
+  $("#commitModal form").on "ajax:success", (event) ->
+    console.log("form submitted successfully", event)
