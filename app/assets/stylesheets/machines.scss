@@ -37,9 +37,14 @@ $border-width: 2px;
     padding: 5px;
   }
 
-  .scan-button button {
+  .scan-button button,
+  button#add-service {
     padding: 2px;
     line-height: normal;
+  }
+
+  button#add-service {
+    margin-top: 5px;
   }
 
 }

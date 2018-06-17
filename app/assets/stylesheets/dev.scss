@@ -9,7 +9,7 @@
     padding: 10px;
     margin-top: 20px;
 
-    border: 1px solid black;
+    border: 1px solid #888;
 
     background-color: #444;
 
@@ -29,17 +29,28 @@
     display: none;
     padding: 10px;
 
+    background-color: #CCC;
+    color: black;
+
     .header {
       padding-top: 5px;
       padding-bottom: 5px;
     }
 
+    .content .change input[type=checkbox],
+    .selection-buttons {
+      display: none;
+    }
+
     .diff-wrap {
-      padding: 10px;
+      padding: 3px;
 
       pre {
-        margin: 5px;
-        color: white;
+        margin: 6px;
+        padding: 3px;
+        border: 1px solid black;
+
+        // color: white;
         font-size: smaller;
       }
     }

@@ -1,4 +1,4 @@
-<div id="machine" class="container">
+<div id="machine" class="container-fluid">
   <div class="row">
     <div class="col col-12">
       <h1><%= @machine.name %></h1>
@@ -7,7 +7,7 @@
   </div>
 
   <div class="row">
-    <div id="basic_info" class="wrapper col col-4">
+    <div id="basic_info" class="wrapper col col-6">
       <div class="content">
         <h2>Basic Info</h2>
         <p>SSH: <%= @ssh_status ? @ssh_status : "nil" %></p>
@@ -29,31 +29,28 @@
       </div>
     </div>
 
-    <div id="memory" class="wrapper col col-4">
+    <div id="services" class="wrapper col">
       <div class="content">
-        <h2>Memory</h2>
-
-        <table>
-          <thead>
-            <% %w|area total used available free buffer|.each do |col| %>
-              <td><%= col %></td>
-            <% end %>
-          </thead>
-          <tbody>
-          <% @machine.memory(unit: "m").each do |row| %>
-          <tr>
-            <% %w|area total used available free buffer|.each do |col| %>
-              <td><%= row[col] %></td>
-            <% end %>
-          </tr>
+        <h2>Services</h2>
+        <% if @scan["services"] && @scan["services"].size > 0 %>
+        <ul>
+          <% @scan["services"].each do |service| %>
+          <li>
+            <%= service %>
+          </li>
           <% end %>
-          </tbody>
-        </table>
-
+        </ul>
+        <% end %>
+        <button id="add-service" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#addServiceModal">
+          add service
+        </button>
       </div>
     </div>
 
-    <div id="disk" class="wrapper col col-4">
+  </div>
+
+  <div class="row">
+    <div id="disk" class="wrapper col">
       <div class="content">
         <h2>Disk</h2>
 
@@ -89,24 +86,30 @@
       </div>
     </div>
 
-  </div>
-
-  <% if @scan["services"] && @scan["services"].size > 0 %>
-  <div class="row">
-    <div id="services" class="wrapper col col-4">
+    <div id="memory" class="wrapper col">
       <div class="content">
-        <h2>Services</h2>
-        <ul>
-          <% @scan["services"].each do |service| %>
-          <li>
-            <%= service %>
-          </li>
+        <h2>Memory</h2>
+
+        <table>
+          <thead>
+            <% %w|area total used available free buffer|.each do |col| %>
+              <td><%= col %></td>
+            <% end %>
+          </thead>
+          <tbody>
+          <% @machine.memory(unit: "m").each do |row| %>
+          <tr>
+            <% %w|area total used available free buffer|.each do |col| %>
+              <td><%= row[col] %></td>
+            <% end %>
+          </tr>
           <% end %>
-        </ul>
+          </tbody>
+        </table>
+
       </div>
     </div>
   </div>
-  <% end %>
 
   <% if @services && @services.include?("apache.apache") %>
   <div class="row">
@@ -141,10 +144,6 @@
     </div>
   </div>
   <% end %>
-
-  <button id="add-service" class="btn btn-primary" data-toggle="modal" data-target="#addServiceModal">
-    add service
-  </button>
 
   <div class="modal fade" id="addServiceModal" tabindex="-1" role="dialog" aria-labelledby="addServiceModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

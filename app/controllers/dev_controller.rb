@@ -61,6 +61,14 @@ class DevController < ApplicationController
     render plain: result
   end
 
+  def commit
+    $vop.commit_changes(
+      machine: "localhost",
+      "working_copy" => working_copy_path,
+      "file" => params[:files]
+    )
+  end
+
   private
 
   def working_copy_path
