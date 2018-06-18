@@ -32,12 +32,20 @@ $ ->
     $("#addServiceModal form input.service").val(serviceName)
 
     $("#addServiceModal .params.container").html("")
-    $.get "/machines/service_params/" + serviceName, (data) ->      
+    $.get "/machines/service_params/" + serviceName, (data) ->
       addParam(param) for param in data
 
   $(".add-service-button").click (event) ->
-    serialized = $("#addServiceModal form").serialize()
+    modal = $("#addServiceModal")
+    machineName = modal.data("machine")
+    serialized = $(modal).find("form").serialize()
     $.post "/machines/install_service", serialized, (data) ->
       console.log("service installation initialized.", data)
+      App.installationStatusChannel = App.cable.subscriptions.create { channel: "InstallationStatus", machine: machineName },
+        received: (json_data) ->
+          console.log("received installation status update", json_data)
+          $.get "/machines/services/" + machineName, (svc_data) ->
+            console.log("got new services", svc_data)
+            $("#services-container").replaceWith(svc_data)
 
     $("#addServiceModal").modal("hide")

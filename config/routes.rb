@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'machines/index'
   get 'machines/scan/:machine', to: 'machines#scan', machine: /[^\/]+/
   get 'machines/show/:machine', to: 'machines#show', machine: /[^\/]+/
+  get 'machines/services/:machine', to: 'machines#services', machine: /[^\/]+/
   # deprecated:
   get 'machines/:machine', to: 'machines#show', machine: /[^\/]+/
 

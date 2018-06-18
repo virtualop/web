@@ -9,7 +9,8 @@ class MachinesController < ApplicationController
     @ssh_status = @machine.test_ssh
 
     @scan = @machine.scan_result
-    @services = @scan["services"]
+
+    services_data
 
     if @services && @services.include?("apache.apache")
       @domains = @machine.vhosts.select do |vhost|
@@ -18,10 +19,20 @@ class MachinesController < ApplicationController
     else
       @domains = []
     end
+  end
 
+  def services_data
+    @machine = $vop.machines[params[:machine]]
+    @services = @machine.detect_services.sort
     @installables = $vop.services
-      .delete_if { |x| @services && @services.include?(x.name) }
       .sort_by { |x| x.name }
+      #.delete_if { |x| @services && @services.include?(x.name) }
+  end
+
+  def services
+    services_data
+
+    render partial: "services"
   end
 
   def new
