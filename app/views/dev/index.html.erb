@@ -2,53 +2,8 @@
   <h1>dev</h1>
 
   <% @working_copies.each do |working_copy| %>
-    <div class="working-copy" data-name="<%= working_copy[:name] %>">
-      <span class="title"><%= working_copy[:name] %></span>
-      <span class="revision"><%= working_copy[:current_revision][:revision][0..7] %></span>
-      <span class="revision_title"><%= working_copy[:current_revision][:title][0..99] %></span>
-      <span class="buttons">
-        <button
-          class="button btn-xs changes-button"
-          data-remote="true"
-          data-url="/dev/git_status/<%= working_copy[:name] %>"
-          data-working-copy="<%= working_copy[:html_name] %>"
-        ><%= @changes[working_copy[:name]].size %></button>
-        <button
-          class="button btn-xs btn-primary pull-button"
-          data-remote="true"
-          data-url="/dev/git_pull/<%= working_copy[:name] %>"
-        >pull</button>
-      </span>
-    </div>
-    <div id="working-copy-detail-<%= working_copy[:html_name] %>"
-      class="working-copy-detail"
-      data-name="<%= working_copy[:name] %>"
-      data-path="<%= working_copy[:path] %>"
-      data-mode="status">
-      <div class="header">
-        <span class="title">Changes:</span>
-        <span class="buttons">
-          <button class="button btn-xs btn-icon checkbox-button">
-            <i class="fa fa-check-square"></i>
-          </button>
-          <button class="button btn-xs btn-icon refresh-button">
-            <i class="fa fa-sync"></i>
-          </button>
-          <button class="button btn-xs btn-icon detail-close-button">
-            <i class="fa fa-times"></i>
-          </button>
-        </span>
-      </div>
-      <div class="content">
-
-      </div>
-      <div class="selection-buttons">
-          selection:&nbsp;
-          <button class="button btn-xs commit-button" data-toggle="modal" data-target="#commitModal">
-            commit
-          </button>
-      </div>
-    </div>
+    <%= render partial: "working_copy", locals: { :working_copy => working_copy } %>
+    <%= render partial: "working_copy_detail", locals: { :working_copy => working_copy } %>
   <% end %>
   <div class="modal fade" id="commitModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
