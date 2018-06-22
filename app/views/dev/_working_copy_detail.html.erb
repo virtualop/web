@@ -1,0 +1,29 @@
+<div id="working-copy-detail-<%= working_copy[:html_name] %>"
+  class="working-copy-detail"
+  data-name="<%= working_copy[:name] %>"
+  data-path="<%= working_copy[:path] %>"
+  data-mode="status">
+  <div class="header">
+    <span class="title">Changes:</span>
+    <span class="buttons">
+      <button class="button btn-xs btn-icon checkbox-button">
+        <i class="fa fa-check-square"></i>
+      </button>
+      <button class="button btn-xs btn-icon refresh-button">
+        <i class="fa fa-sync"></i>
+      </button>
+      <button class="button btn-xs btn-icon detail-close-button">
+        <i class="fa fa-times"></i>
+      </button>
+    </span>
+  </div>
+  <div class="content">
+
+  </div>
+  <div class="selection-buttons">
+      selection:&nbsp;
+      <button class="button btn-xs commit-button" data-toggle="modal" data-target="#commitModal">
+        commit
+      </button>
+  </div>
+</div>

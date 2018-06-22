@@ -1,0 +1,18 @@
+<div class="working-copy" data-name="<%= working_copy[:name] %>">
+  <span class="title"><%= working_copy[:name] %></span>
+  <span class="revision"><%= working_copy[:current_revision]["revision"][0..7] %></span>
+  <span class="revision_title" title="<%= working_copy[:current_revision]["title"] %>"><%= working_copy[:current_revision]["title"][0..99] %></span>
+  <span class="buttons">
+    <button
+      class="button btn-xs changes-button"
+      data-remote="true"
+      data-url="/dev/git_status/<%= working_copy[:name] %>"
+      data-working-copy="<%= working_copy[:html_name] %>"
+    ><%= working_copy[:changes].size %></button>
+    <button
+      class="button btn-xs btn-primary pull-button"
+      data-remote="true"
+      data-url="/dev/git_pull/<%= working_copy[:name] %>"
+    >pull</button>
+  </span>
+</div>

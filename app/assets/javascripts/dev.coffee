@@ -27,15 +27,16 @@ processChanges = (detail, data) ->
 
   workingCopy = detail.prev(".working-copy")
   changesButton = workingCopy.find(".changes-button").first()
-  console.log("updating changes button", changesButton)
   changesButton.html(data.length)
 
   detail.find(".selection-buttons").hide()
 
 
 $ ->
-  $("#dev-wrap .pull-button").on "ajax:success", (event) ->
-    console.log("pulled.")
+  $("#dev-wrap").on "ajax:success", ".pull-button", (event) ->
+    [data, status, xhr] = event.detail
+    working_copy = $(event.currentTarget).closest(".working-copy")[0]
+    $(working_copy).replaceWith(data.body.innerHTML)
 
   $("#dev-wrap .changes-button").on "ajax:success", (event) ->
     [data, status, xhr] = event.detail
