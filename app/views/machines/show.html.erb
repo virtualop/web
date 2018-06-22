@@ -40,7 +40,7 @@
 
         <table>
           <thead>
-            <% %w|mount size full free progress|.each do |col| %>
+            <% %w|mount size free full|.each do |col| %>
               <td><%= col %></td>
             <% end %>
           </thead>
@@ -51,7 +51,6 @@
           <tr>
             <td><%= row[:mount_point][0..63] %></td>
             <td><%= row[:size] %></td>
-            <td><%= row[:full] %></td>
             <td><%= row[:free] %></td>
             <td>
               <div class="progress">
