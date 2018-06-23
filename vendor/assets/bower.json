@@ -2,6 +2,6 @@
   "name": "dsl-generated-dependencies",
   "dependencies": {
     "font-awesome": "latest",
-    "lato": "https://google-fonts.azurewebsites.net/googleFonts/lato?family=Lato"
+    "chart.js": "latest"
   }
 }
