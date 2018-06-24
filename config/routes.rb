@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get 'dev/git_diff/:working_copy(/:file)' => 'dev#git_diff', file: /.+/
   get 'dev/git_status/:working_copy' => 'dev#git_status'
   post 'dev/commit' => 'dev#commit'
+  post 'dev/add_file/:working_copy/:file' => 'dev#add_file', file: /.+/
 
   get 'log' => 'log#index'
   get 'log/index'
