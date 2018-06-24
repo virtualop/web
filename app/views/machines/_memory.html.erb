@@ -1,0 +1,23 @@
+<div id="memory" class="wrapper col">
+  <div class="content">
+    <h2>Memory</h2>
+
+    <table>
+      <thead>
+        <% %w|area total used available free buffer|.each do |col| %>
+          <td><%= col %></td>
+        <% end %>
+      </thead>
+      <tbody>
+      <% @machine.memory(unit: "m").each do |row| %>
+      <tr>
+        <% %w|area total used available free buffer|.each do |col| %>
+          <td><%= row[col] %></td>
+        <% end %>
+      </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>

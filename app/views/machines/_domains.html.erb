@@ -1,0 +1,12 @@
+<div id="vhosts" class="wrapper col col-4">
+  <div class="content">
+    <h2>Domains</h2>
+    <ul>
+      <% @domains.each do |vhost| %>
+      <li>
+        <%= vhost["domain"] %>
+      <li>
+      <% end %>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div id="basic_info" class="wrapper col col-6">
+  <div class="content">
+    <h2>Basic Info</h2>
+    <p>SSH: <%= @ssh_status ? @ssh_status : "nil" %></p>
+    <p>Last Scan:
+      <span class="last_span"><%= @scan["scan_from"] ? time_ago_in_words(@scan["scan_from"]) + " ago" : "never" %></span>
+      &nbsp;
+      <span class="scan-button" data-machine="<%= @machine.name %>">
+        <button class="btn btn-xs btn-primary">scan</button>
+      </span>
+    </p>
+
+    <% if @ssh_status %>
+      <p>hostname: <%= @machine.hostname %></p>
+      <p>distro: <%= @scan["distro"] %></p>
+      <% unless @internal_ip.nil? %>
+      <p>internal IP: <%= @machine.internal_ip %></p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

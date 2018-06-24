@@ -1,0 +1,12 @@
+<div id="package" class="wrapper col col-4">
+  <div class="content">
+    <h2>Packages</h2>
+    <ul>
+      <% @scan["packages"].each do |package| %>
+      <li>
+        <%= package["name"] %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
