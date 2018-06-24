@@ -44,6 +44,14 @@ class DevController < ApplicationController
     render plain: result
   end
 
+  def add_file
+    $vop.add_file_to_version_control(
+      machine: "localhost",
+      "working_copy" => working_copy_path(),
+      "file_name" => params[:file]
+    )
+  end
+
   def commit
     $vop.commit_changes(
       machine: "localhost",

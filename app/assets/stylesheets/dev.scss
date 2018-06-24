@@ -38,9 +38,12 @@
     }
 
     .content .change input[type=checkbox],
+    .select-all,
     .selection-buttons {
       display: none;
     }
+
+
 
     .diff-wrap {
       padding: 3px;

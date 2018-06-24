@@ -6,9 +6,23 @@ detailWindow = (event) ->
 addChange = (change, target) ->
   checkbox = $('<input type="checkbox" />').data("path", change.path)
   checkboxSpan = $("<span />").append(checkbox)
+  addDiv = $("<div />")
+  #addDiv.html($("<a />").attr("href", "#").html("add"))
+  addDiv.html("add")
+  addDiv.addClass("add-file")
+  addDiv.data("path", change.path)
+  detail = $(target).closest(".working-copy-detail")
+  addDiv.data("working_copy", detail.data("name"))
+  addDiv.data("detail", detail)
+  statusSpan = $("<span />")
+    .addClass("status")
+    .html(change.raw)
+    #.attr("title", 'foo')
+    .data("container", "#dev-wrap")
+    .popover(content: addDiv, html: true)
   titleDiv = $("<div />").addClass("title")
     .append checkboxSpan
-    .append $("<span />").html(change.raw)
+    .append statusSpan
     .append $("<span />").addClass("path").html(change.path)
   detailDiv = $("<div />").addClass("detail")
   changeDiv = $("<div />").addClass("change")
@@ -22,6 +36,13 @@ processChanges = (detail, data) ->
 
   contentArea = detail.find(".content").first()
   contentArea.html("")
+
+  # extra checkbox for "select all"
+  checkbox = $('<input type="checkbox" />')
+  checkboxSpan = $("<span />")
+    .addClass "select-all"
+    .append(checkbox)
+  contentArea.append(checkboxSpan)
 
   addChange(change, contentArea) for change in data
 
@@ -53,6 +74,10 @@ $ ->
     detail = $(event.target).closest(".working-copy-detail")
     detail.find(".change input[type=checkbox]").toggle()
     detail.find(".selection-buttons").toggle()
+    detail.find(".select-all").toggle()
+
+  $("#dev-wrap").on "click", ".select-all", (event) ->
+    $(".change .title input[type=checkbox]").prop("checked", $(event.target).prop("checked"))
 
   $("#dev-wrap").on "click", ".detail-close-button", (event) ->
     [data, status, xhr] = event.detail
@@ -72,6 +97,22 @@ $ ->
         pre = $("<pre />").html(data)
         diffWrap = $("<div />").addClass("diff-wrap").append(pre)
         detail.append(diffWrap)
+
+  $("#dev-wrap").on "click", ".add-file", (event) ->
+    addFile = event.currentTarget
+    workingCopy = $(addFile).data("working_copy")
+    detail = $(addFile).data("detail")
+    console.log("add file", event.currentTarget)
+    console.log("path", $(addFile).data("path"))
+    console.log("workingCopy", workingCopy)
+    $.post "/dev/add_file/" + workingCopy + "/" + $(addFile).data("path"),
+      authenticity_token: $('[name="csrf-token"]')[0].content,
+      (data) ->
+        console.log("added file.")
+        $("#dev-wrap .popover").popover("hide")
+        # TODO [untested] copied from refresh button:
+        $.get "/dev/git_status/" + workingCopy + "?refresh=true", (newData) ->
+          processChanges(detail, newData)
 
   $("#commitModal").on "show.bs.modal", (event) ->
     console.log("showing commit modal")
@@ -94,3 +135,5 @@ $ ->
 
   $("#commitModal form").on "ajax:success", (event) ->
     console.log("form submitted successfully", event)
+
+  $('[data-toggle="popover"]').popover()
