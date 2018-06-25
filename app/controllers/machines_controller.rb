@@ -38,8 +38,14 @@ class MachinesController < ApplicationController
   def new
     $logger.info "new machine #{params[:vm_name]} on #{params[:host_name]}"
 
-    request = ::Vop::Request.new $vop, "new_machine",
-      {"machine" => params[:host_name], "name" => params[:vm_name]}
+    p = {
+      "machine" => params[:host_name],
+      "name" => params[:vm_name]
+    }
+    if params[:memory]
+      p[:memory] = params[:memory]
+    end
+    request = ::Vop::Request.new $vop, "new_machine", p
     $vop.execute_async(request)
   end
 
