@@ -132,7 +132,7 @@ $ ->
     $("#commitModal form").submit()
     $("#commitModal").modal("hide")
 
-  $("#commitModal form").on "ajax:success", (event) ->
+  $("#dev-wrap").on "ajax:success", "#commitModal form", (event) ->
     console.log("form submitted successfully", event)
     #workingCopy = $("#commitModal form input[name=working_copy]").val()
     #console.log("workingCopy", workingCopy)
