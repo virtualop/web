@@ -128,10 +128,20 @@ $ ->
 
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
     console.log("submitting", $("#commitModal form"))
+    $("#commitModal").data("workingCopyDetail", $(event.currentTarget).closest(".working-copy-detail"))
     $("#commitModal form").submit()
     $("#commitModal").modal("hide")
 
   $("#commitModal form").on "ajax:success", (event) ->
     console.log("form submitted successfully", event)
+    #workingCopy = $("#commitModal form input[name=working_copy]").val()
+    #console.log("workingCopy", workingCopy)
+    detail = $("#commitModal").data("workingCopyDetail")
+    console.log("detail", detail)
+    workingCopy = $(detail).data("name")
+    console.log("workingCopy", workingCopy)
+    $.get "/dev/git_status/" + workingCopy + "?refresh=true", (data) ->
+      console.log("got changes", data)
+      processChanges(detail, data)
 
   $('[data-toggle="popover"]').popover()
