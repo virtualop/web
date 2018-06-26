@@ -128,20 +128,17 @@ $ ->
 
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
     console.log("submitting", $("#commitModal form"))
-    $("#commitModal").data("workingCopyDetail", $(event.currentTarget).closest(".working-copy-detail"))
-    $("#commitModal form").submit()
-    $("#commitModal").modal("hide")
-
-  $("#dev-wrap").on "ajax:success", "#commitModal form", (event) ->
-    console.log("form submitted successfully", event)
-    #workingCopy = $("#commitModal form input[name=working_copy]").val()
-    #console.log("workingCopy", workingCopy)
-    detail = $("#commitModal").data("workingCopyDetail")
-    console.log("detail", detail)
-    workingCopy = $(detail).data("name")
-    console.log("workingCopy", workingCopy)
-    $.get "/dev/git_status/" + workingCopy + "?refresh=true", (data) ->
-      console.log("got changes", data)
-      processChanges(detail, data)
+    detail = $(event.currentTarget).closest(".working-copy-detail")
+    form_data = $("#commitModal form").serialize()
+    console.log("form data", form_data)
+    $.post "/dev/commit", form_data, (data) ->
+      console.log("detail", detail)
+      workingCopy = $(detail).data("name")
+      console.log("workingCopy", workingCopy)
+      $.get "/dev/git_status/" + workingCopy + "?refresh=true", (data) ->
+        console.log("got changes", data)
+        processChanges(detail, data)
+        $("#commitModal").modal("hide")
+        console.log("cause you're stoopid.")
 
   $('[data-toggle="popover"]').popover()
