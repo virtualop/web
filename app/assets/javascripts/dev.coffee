@@ -127,19 +127,13 @@ $ ->
       files.append $('<input type="text" name="file[]" value="' + $(value).data("path") + '" />')
 
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
-    console.log("submitting", $("#commitModal form"))
     detail = $("#commitModal form").data("detail")
-    #detail = $(event.currentTarget).closest(".working-copy-detail")
-    form_data = $("#commitModal form").serialize()
-    console.log("form data", form_data)
-    $.post "/dev/commit", form_data, (data) ->
-      console.log("detail", detail)
-      workingCopy = $(detail).data("name")
-      console.log("workingCopy", workingCopy)
-      $.get "/dev/git_status/" + workingCopy + "?refresh=true", (data) ->
-        console.log("got changes", data)
-        processChanges(detail, data)
-        $("#commitModal").modal("hide")
-        console.log("cause you're stoopid.")
+    workingCopy = $(detail).data("name")    
+    $.post "/dev/commit",
+      $("#commitModal form").serialize(),
+      (data) ->
+        $.get "/dev/git_status/" + workingCopy + "?refresh=true", (status) ->
+          processChanges(detail, status)
+          $("#commitModal").modal("hide")
 
   $('[data-toggle="popover"]').popover()
