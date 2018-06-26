@@ -119,7 +119,7 @@ $ ->
     detail = $(event.currentTarget).closest(".working-copy-detail")
     console.log("showing commit form, working copy", detail.data("name"))
     $("#commitModal form input[name=working_copy]").val(detail.data("name"))
-
+    $("#commitModal form").data("detail", detail)
     files = $("#commitModal form div.files")
     files.html("")
     $(detail).find(".change input[type=checkbox]:checked").each (idx, value) ->
@@ -128,7 +128,8 @@ $ ->
 
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
     console.log("submitting", $("#commitModal form"))
-    detail = $(event.currentTarget).closest(".working-copy-detail")
+    detail = $("#commitModal form").data("detail")
+    #detail = $(event.currentTarget).closest(".working-copy-detail")
     form_data = $("#commitModal form").serialize()
     console.log("form data", form_data)
     $.post "/dev/commit", form_data, (data) ->
