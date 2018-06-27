@@ -46,6 +46,6 @@ $ ->
           console.log("received installation status update", json_data)
           $.get "/machines/services/" + machineName, (svc_data) ->
             console.log("got new services", svc_data)
-            $("#services-container").replaceWith(svc_data)
+            $("#services").replaceWith(svc_data)
 
     $("#addServiceModal").modal("hide")

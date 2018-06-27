@@ -1,20 +1,18 @@
-<div id="services-container">
-  <div id="services" class="wrapper col">
-    <div class="content">
-      <h2>Services</h2>
-      <% if @services && @services.size > 0 %>
-      <ul>
-        <% @services.each do |service| %>
-        <li>
-          <%= service %>
-        </li>
-        <% end %>
-      </ul>
+<div id="services" class="wrapper col">
+  <div class="content">
+    <h2>Services</h2>
+    <% if @services && @services.size > 0 %>
+    <ul>
+      <% @services.each do |service| %>
+      <li>
+        <%= service %>
+      </li>
       <% end %>
-      <button id="add-service" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#addServiceModal">
-        add service
-      </button>
-    </div>
+    </ul>
+    <% end %>
+    <button id="add-service" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#addServiceModal">
+      add service
+    </button>
   </div>
 
   <div class="modal fade" id="addServiceModal"
