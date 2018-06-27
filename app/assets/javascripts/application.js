@@ -17,4 +17,5 @@
 //= require activestorage
 //= require turbolinks
 //= require chart.js/dist/Chart.bundle.min.js
+//= require diff2html/dist/diff2html.min.js
 //= require_tree .
