@@ -92,6 +92,12 @@ $ ->
       workingCopy = change.closest(".working-copy-detail")
       diff_url = "/dev/git_diff/" + $(workingCopy).data("name") + "/" + change.data("path")
       $.get diff_url, (data) ->
+        # console.log("got diff", data)
+        # diffHtml = Diff2Html.getPrettyHtml(
+        #   data,
+        #   {inputFormat: 'diff', showFiles: false, matching: 'lines', outputFormat: 'side-by-side'}
+        # )
+        # console.log("diffffffffffffffffffHtml", diffHtml)
         pre = $("<pre />").html(data)
         diffWrap = $("<div />").addClass("diff-wrap").append(pre)
         detail.append(diffWrap)
@@ -108,12 +114,12 @@ $ ->
       (data) ->
         console.log("added file.")
         $("#dev-wrap .popover").popover("hide")
-        # TODO [untested] copied from refresh button:
         $.get "/dev/git_status/" + workingCopy + "?refresh=true", (newData) ->
           processChanges(detail, newData)
 
   $("#commitModal").on "show.bs.modal", (event) ->
     console.log("showing commit modal")
+    $("#commitModal textarea[name=comment]").val("")
 
   $("#dev-wrap").on "click", ".working-copy-detail .selection-buttons .commit-button", (event) ->
     detail = $(event.currentTarget).closest(".working-copy-detail")
@@ -128,7 +134,7 @@ $ ->
 
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
     detail = $("#commitModal form").data("detail")
-    workingCopy = $(detail).data("name")    
+    workingCopy = $(detail).data("name")
     $.post "/dev/commit",
       $("#commitModal form").serialize(),
       (data) ->
