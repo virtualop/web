@@ -52,35 +52,48 @@ processChanges = (detail, data) ->
 
 
 $ ->
+  # pull
   $("#dev-wrap").on "ajax:success", ".pull-button", (event) ->
     [data, status, xhr] = event.detail
     working_copy = $(event.currentTarget).closest(".working-copy")[0]
+    console.log("got pull result", data.body.innerHTML)
     $(working_copy).replaceWith(data.body.innerHTML)
+    name = $(working_copy).data("name")
+    $(".working-copy#" + name).effect("highlight")
 
-  $("#dev-wrap .changes-button").on "ajax:success", (event) ->
+  $("#dev-wrap").on "ajax:error", ".pull-button", (event) ->
+    console.log("ajax:error", event)
+
+  # changes
+  $("#dev-wrap").on "ajax:success", ".changes-button", (event) ->
     [data, status, xhr] = event.detail
     detail = $(event.target).closest(".working-copy").next(".working-copy-detail")
     processChanges(detail, data)
 
+  # refresh
   $("#dev-wrap").on "click", ".refresh-button", (event) ->
     detail = $(event.currentTarget).closest(".working-copy-detail")
     workingCopy = $(detail).data("name")
     $.get "/dev/git_status/" + workingCopy + "?refresh=true", (data) ->
       processChanges(detail, data)
 
+  # checkbox
   $("#dev-wrap").on "click", ".checkbox-button", (event) ->
     detail = $(event.target).closest(".working-copy-detail")
     detail.find(".change input[type=checkbox]").toggle()
     detail.find(".selection-buttons").toggle()
     detail.find(".select-all").toggle()
 
+  # select all
   $("#dev-wrap").on "click", ".select-all", (event) ->
     $(".change .title input[type=checkbox]").prop("checked", $(event.target).prop("checked"))
 
+  # close
   $("#dev-wrap").on "click", ".detail-close-button", (event) ->
     [data, status, xhr] = event.detail
     $(event.currentTarget).closest(".working-copy-detail").hide()
 
+  # diff
   $("#dev-wrap").on "click", ".change .title .path", (event) ->
     change = $(event.currentTarget).closest(".change")
     detail = change.find(".detail").first()
@@ -102,6 +115,7 @@ $ ->
         diffWrap = $("<div />").addClass("diff-wrap").append(pre)
         detail.append(diffWrap)
 
+  # add file
   $("#dev-wrap").on "click", ".add-file", (event) ->
     addFile = event.currentTarget
     workingCopy = $(addFile).data("working_copy")
@@ -117,13 +131,10 @@ $ ->
         $.get "/dev/git_status/" + workingCopy + "?refresh=true", (newData) ->
           processChanges(detail, newData)
 
-  $("#commitModal").on "show.bs.modal", (event) ->
-    console.log("showing commit modal")
-    $("#commitModal textarea[name=comment]").val("")
-
   $("#dev-wrap").on "click", ".working-copy-detail .selection-buttons .commit-button", (event) ->
     detail = $(event.currentTarget).closest(".working-copy-detail")
     console.log("showing commit form, working copy", detail.data("name"))
+    $("#commitModal textarea[name=comment]").val("")
     $("#commitModal form input[name=working_copy]").val(detail.data("name"))
     $("#commitModal form").data("detail", detail)
     files = $("#commitModal form div.files")
@@ -132,6 +143,7 @@ $ ->
       console.log("path", $(value).data("path"))
       files.append $('<input type="text" name="file[]" value="' + $(value).data("path") + '" />')
 
+  # commit
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
     detail = $("#commitModal form").data("detail")
     workingCopy = $(detail).data("name")

@@ -1,4 +1,4 @@
-<div class="working-copy" data-name="<%= working_copy[:name] %>">
+<div class="working-copy" id="<%= working_copy[:name] %>" data-name="<%= working_copy[:name] %>">
   <span class="title"><%= working_copy[:name] %></span>
   <span class="revision"><%= working_copy[:current_revision]["revision"][0..7] %></span>
   <span class="revision_title" title="<%= working_copy[:current_revision]["title"] %>"><%= working_copy[:current_revision]["title"][0..99] %></span>
