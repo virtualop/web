@@ -64,6 +64,14 @@ $ ->
   $("#dev-wrap").on "ajax:error", ".pull-button", (event) ->
     console.log("ajax:error", event)
 
+  # push
+  $("#dev-wrap").on "ajax:success", ".push-button", (event) ->
+    [data, status, xhr] = event.detail
+    working_copy = $(event.currentTarget).closest(".working-copy")[0]
+    console.log("got push result", data)
+    name = $(working_copy).data("name")
+    $(".working-copy#" + name).effect("highlight")
+
   # changes
   $("#dev-wrap").on "ajax:success", ".changes-button", (event) ->
     [data, status, xhr] = event.detail

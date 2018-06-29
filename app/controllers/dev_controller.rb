@@ -20,6 +20,11 @@ class DevController < ApplicationController
     render partial: "working_copy", locals: { working_copy: working_copy }, layout: nil
   end
 
+  def git_push
+    result = $vop.push_working_copy(machine: "localhost", "working_copy" => working_copy_path())
+    render plain: result
+  end
+
   def git_status
     p = {
       machine: "localhost",
