@@ -158,8 +158,9 @@ $ ->
     $.post "/dev/commit",
       $("#commitModal form").serialize(),
       (data) ->
-        $.get "/dev/git_status/" + workingCopy + "?refresh=true", (status) ->
-          processChanges(detail, status)
-          $("#commitModal").modal("hide")
+        console.log("commit result", data)
+        processChanges(detail, data)
+        $("#commitModal").modal("hide")
+        $(detail).effect("highlight")
 
   $('[data-toggle="popover"]').popover()

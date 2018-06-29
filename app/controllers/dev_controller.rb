@@ -57,13 +57,14 @@ class DevController < ApplicationController
     )
   end
 
-  def commit
-    $vop.commit_changes(
+  def commit    
+    new_status = $vop.commit_changes(
       machine: "localhost",
       "working_copy" => working_copy_path,
       "comment" => params[:comment],
       "file" => params[:file]
     )
+    render json: new_status.to_json()
   end
 
   private
