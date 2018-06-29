@@ -1,3 +1,4 @@
 asset 'font-awesome'
 asset 'chart.js'
 asset 'diff2html'
+asset 'jquery-ui'

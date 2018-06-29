@@ -3,6 +3,7 @@
   "dependencies": {
     "font-awesome": "latest",
     "chart.js": "latest",
-    "diff2html": "latest"
+    "diff2html": "latest",
+    "jquery-ui": "latest"
   }
 }
