@@ -31,6 +31,7 @@ $border-width: 2px;
     padding-bottom: 15px;
 
     margin-bottom: 8px;
+    min-height: 150px;
   }
 
   .row table td {
@@ -45,6 +46,20 @@ $border-width: 2px;
 
   button#add-service {
     margin-top: 5px;
+  }
+
+  .canvas-wrapper {
+    // height: 120px;
+    // width: 300px;
+  }
+
+  canvas {
+    // width:600px !important;
+    // height:400px !important;
+  }
+
+  .progress {
+    min-width: 50px;
   }
 
 }

@@ -1,19 +1,30 @@
-<div id="memory" class="wrapper col">
+<div id="memory" class="wrapper col col-4">
   <div class="content">
     <h2>Memory</h2>
 
     <table>
       <thead>
-        <% %w|area total used available free buffer|.each do |col| %>
+        <% %w|area total used available full|.each do |col| %>
           <td><%= col %></td>
         <% end %>
       </thead>
       <tbody>
       <% @machine.memory(unit: "m").each do |row| %>
       <tr>
-        <% %w|area total used available free buffer|.each do |col| %>
+        <% %w|area total used available|.each do |col| %>
           <td><%= row[col] %></td>
         <% end %>
+        <td>
+          <% full = row["full"] %>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar"
+              style="width: <%= full %>%"
+              aria-valuenow="<%= full %>"
+              aria-valuemin="0" aria-valuemax="100">
+              <span class="progress-text" role="title" title="<%= full %>% full"><%= full %>%</span>
+            </div>
+          </div>
+        </td>
       </tr>
       <% end %>
       </tbody>

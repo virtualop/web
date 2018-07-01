@@ -9,6 +9,9 @@
   <div class="row">
     <%= render partial: "basic_info" %>
     <%= render partial: "services" %>
+    <% if @services && @services.include?("apache.apache") %>
+      <%= render partial: "domains" %>
+    <% end %>
   </div>
 
   <div class="row">
@@ -18,7 +21,7 @@
 
   <% if @services && @services.include?("apache.apache") %>
   <div class="row">
-    <%= render partial: "domains" %>
+    <%#= render partial: "domains" %>
     <div class="col col-md-8">
       <%#= render partial: "graph" %>
     </div>
