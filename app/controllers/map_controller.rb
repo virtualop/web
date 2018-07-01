@@ -1,7 +1,30 @@
 require "benchmark"
 
 class MapController < ApplicationController
+
   def index
+  end
+
+  def accounts
+    @accounts = $vop.hetzner_accounts
+  end
+
+  # helper that loads VMs and machine objects for a list of host names
+  # returns an array holding
+  # [0] an array of machine entities for the hosts
+  # [1] a hash holding VMs per host name
+  def vms_for_host_names(host_names)
+    @host_vms = {}
+    @hosts = []
+    host_names.each do |host_name|
+      @host_vms[host_name] = host_data(host_name)
+      @hosts << $vop.machines[host_name]
+    end
+  end
+
+  def account
+    host_names = $vop.hetzner_server_list(params[:account]).map { |x| x["name"] }
+    vms_for_host_names(host_names)
   end
 
   def group

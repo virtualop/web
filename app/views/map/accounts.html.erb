@@ -1,0 +1,7 @@
+<div id="accounts-map">
+  <h1>Accounts</h1>
+
+  <% @accounts.each do |account| %>
+    <%= render partial: "account", locals: { account: account } %>
+  <% end %>
+</div>

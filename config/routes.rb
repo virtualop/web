@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
+  get 'map' => 'map#accounts'
   get 'map/index'
+  get 'map/accounts'
+  get 'map/account/:account', to: 'map#account'
   get 'map/group'
   get 'map/host'
   get 'map/host_fragment'

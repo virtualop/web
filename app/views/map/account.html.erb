@@ -1,0 +1,12 @@
+<div id="account-map">
+  <h1>Account: <%= params[:account] %></h1>
+
+  <div id="host_map">
+  <% @hosts.each do |host| %>
+    <%= render partial: "host", locals: {
+        host: host,
+        vms: @host_vms[host.name]
+      } %>
+  <% end %>
+  </div>
+</div>
