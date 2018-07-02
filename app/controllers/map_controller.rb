@@ -71,6 +71,7 @@ class MapController < ApplicationController
     vms.map do |vm|
       vm["full_name"] = "#{vm["name"]}.#{host.name}"
       vm["readable_state"] = vm["state"].tr(" ", "_")
+      vm["installation_status"] = $vop.installation_status(host_name: host.name, vm_name: vm["name"])
 
       ssh_status = false
       begin

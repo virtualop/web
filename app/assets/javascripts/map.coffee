@@ -35,10 +35,26 @@ $ ->
       payload,
       (data) ->
         console.log("VM " + vm_name + " installation has been started on " + host_name, $(this))
-        installing_span = $('<span title="installing" class="vm_state_indicator installing">&nbsp;</span>&nbsp;<span>' + vm_name + '...</span>')
+        installing_span = $('<span title="installing" class="vm_state_indicator installing">&nbsp;</span>&nbsp;<span>' + vm_name + '</span>&nbsp;<span class="vm_installation_status">...</span>')
         vm_wrapper = $(new_vm_form).closest("div.vm_wrapper").first().html(installing_span)
 
-        # startRefresh(host_element.data("machine"))
+        machineName = "#{vm_name}.#{host_name}"
+        App.installationStatusChannel = App.cable.subscriptions.create { channel: "VmInstallationStatus", machine: machineName },
+          received: (json_data) ->
+            console.log("received vm installation status update", json_data)
+            update = JSON.parse(json_data)
+            console.log("update", update)
+            description = update.status
+            if description.match(/ing$/)
+              description = "#{update.status}..."
+            else
+              update.status
+            $('.vm_installation_status').html("[#{description}]")
+            if update.status == "prepared"
+              $('.vm_placeholder .vm_state_indicator').removeClass("installing")
+              $('.vm_placeholder .vm_state_indicator').addClass("installed")
+              $('.vm_placeholder .vm_installation_status').fadeOut(1000)
+
     false
 
   $("#newVmSettings .dropdown-menu.memory .dropdown-item").click (event) ->

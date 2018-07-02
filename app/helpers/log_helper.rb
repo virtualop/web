@@ -10,9 +10,9 @@ module LogHelper
     end
 
     def channel_name(message_json = nil)
-      if queue == "installation_status"
+      if queue == "installation_status" || queue == "vm_installation_status"
         message = JSON.parse(message_json)
-        "installation_status_#{message["machine"]}"
+        "#{queue}_#{message["machine"]}"
       else
         queue
       end
@@ -36,7 +36,7 @@ module LogHelper
   end
 
   def self.message_pump
-    threads = %w|vop_log installation_status|.map do |queue|
+    threads = %w|vop_log installation_status vm_installation_status|.map do |queue|
       self.watch queue
     end
     threads.each do |thread|
