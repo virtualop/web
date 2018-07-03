@@ -1,7 +1,7 @@
 <div id="basic_info" class="wrapper col col-4">
   <div class="content">
     <h2>Basic Info</h2>
-    <p>SSH: <%= @ssh_status ? @ssh_status : "nil" %></p>
+    <p>SSH: <%= @ssh_status ? @ssh_status : "no connection" %></p>
     <p>Last Scan:
       <span class="last_span"><%= @scan["scan_from"] ? time_ago_in_words(@scan["scan_from"]) + " ago" : "never" %></span>
       &nbsp;

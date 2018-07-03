@@ -15,8 +15,10 @@
   </div>
 
   <div class="row">
-    <%= render partial: "disk" %>
-    <%= render partial: "memory" %>
+    <% if @ssh_status %>
+      <%= render partial: "disk" %>
+      <%= render partial: "memory" %>
+    <% end %>
   </div>
 
   <% if @services && @services.include?("apache.apache") %>

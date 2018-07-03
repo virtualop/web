@@ -9,15 +9,19 @@ class DevController < ApplicationController
   end
 
   def git_pull
-    revision = $vop.git_pull(machine: "localhost", "working_copy" => working_copy_path())
-    working_copy = {
-      name: params[:working_copy],
-      path: working_copy_path(),
-      html_name: working_copy_path().gsub("/", "-"),
-      current_revision: revision,
-      changes: $vop.git_status(machine: "localhost", "working_copy" => working_copy_path())
-    }
-    render partial: "working_copy", locals: { working_copy: working_copy }, layout: nil
+    begin
+      revision = $vop.git_pull(machine: "localhost", "working_copy" => working_copy_path())
+      working_copy = {
+        name: params[:working_copy],
+        path: working_copy_path(),
+        html_name: working_copy_path().gsub("/", "-"),
+        current_revision: revision,
+        changes: $vop.git_status(machine: "localhost", "working_copy" => working_copy_path())
+      }
+      render partial: "working_copy", locals: { working_copy: working_copy }, layout: nil
+    rescue => e
+      render partial: "error", status: 500, locals: { message: e.message, error: e }
+    end
   end
 
   def git_push
@@ -49,6 +53,14 @@ class DevController < ApplicationController
     render plain: result
   end
 
+  def new_diff
+    @diff = $vop.git_diff(
+      machine: "localhost",
+      "working_copy" => working_copy_path(),
+      "path_fragment" => params[:file] || ""
+    )
+  end
+
   def add_file
     $vop.add_file_to_version_control(
       machine: "localhost",
@@ -57,7 +69,7 @@ class DevController < ApplicationController
     )
   end
 
-  def commit    
+  def commit
     new_status = $vop.commit_changes(
       machine: "localhost",
       "working_copy" => working_copy_path,

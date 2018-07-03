@@ -54,6 +54,7 @@ processChanges = (detail, data) ->
 $ ->
   # pull
   $("#dev-wrap").on "ajax:success", ".pull-button", (event) ->
+    console.log("pull result", event.detail)
     [data, status, xhr] = event.detail
     working_copy = $(event.currentTarget).closest(".working-copy")[0]
     console.log("got pull result", data.body.innerHTML)
@@ -62,7 +63,8 @@ $ ->
     $(".working-copy#" + name).effect("highlight")
 
   $("#dev-wrap").on "ajax:error", ".pull-button", (event) ->
-    console.log("ajax:error", event)
+    [data, status, xhr] = event.detail
+    $("#dev-wrap").append(data.body.innerHTML)
 
   # push
   $("#dev-wrap").on "ajax:success", ".push-button", (event) ->
@@ -113,12 +115,6 @@ $ ->
       workingCopy = change.closest(".working-copy-detail")
       diff_url = "/dev/git_diff/" + $(workingCopy).data("name") + "/" + change.data("path")
       $.get diff_url, (data) ->
-        # console.log("got diff", data)
-        # diffHtml = Diff2Html.getPrettyHtml(
-        #   data,
-        #   {inputFormat: 'diff', showFiles: false, matching: 'lines', outputFormat: 'side-by-side'}
-        # )
-        # console.log("diffffffffffffffffffHtml", diffHtml)
         pre = $("<pre />").html(data)
         diffWrap = $("<div />").addClass("diff-wrap").append(pre)
         detail.append(diffWrap)
