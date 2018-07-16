@@ -12,6 +12,11 @@ $ ->
     vm_element = event.currentTarget.closest(".vm")
     $(vm_element).hide()
 
+  $("#newVmSettings .dropdown-menu.memory .dropdown-item").click (event) ->
+    console.log("clicked memory", $(event.currentTarget).data("mb"))
+    $("#dropdownMenuButton").html($(event.currentTarget).data("mb"))
+    event.preventDefault()    
+
   $(document).on "submit", ".new_vm_form", (event) ->
     event.preventDefault()
     new_vm_form = event.currentTarget
@@ -56,7 +61,3 @@ $ ->
               $('.vm_placeholder .vm_installation_status').fadeOut(1000)
 
     false
-
-  $("#newVmSettings .dropdown-menu.memory .dropdown-item").click (event) ->
-    console.log("clicked memory", $(event.currentTarget).data("mb"))
-    $("#dropdownMenuButton").html($(event.currentTarget).data("mb"))
