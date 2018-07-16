@@ -23,9 +23,8 @@
 
   <% if @services && @services.include?("apache.apache") %>
   <div class="row">
-    <%#= render partial: "domains" %>
     <div class="col col-md-8">
-      <%#= render partial: "graph" %>
+      <%= render partial: "graph" %>
     </div>
   </div>
   <% end %>
