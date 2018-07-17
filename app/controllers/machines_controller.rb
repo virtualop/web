@@ -16,6 +16,47 @@ class MachinesController < ApplicationController
       @domains = @machine.vhosts.select do |vhost|
         ! vhost["domain"].nil?
       end
+
+      begin
+        # index the aggregated data by timestamp
+        success = @machine.aggregate_access_log_tail(count: 250, interval: "minute")[:success]
+        #success = @machine.aggregate_access_log_tail(count: 250)[:success]
+        by_timestamp = {}
+        success.each do |entry|
+          by_timestamp[entry.first] = entry.last
+        end
+
+        @traffic = []
+        @labels = []
+        now = Time.now
+
+        # we want the last 6 hours
+        # current_hour = Time.at(now.to_i - now.sec - (now.min * 60))
+        # 5.downto(0) do |idx|
+        #   hour = Time.at(current_hour.to_i - (60 * 60 * idx))
+        #   next_hour = Time.at(current_hour.to_i - (60 * 60 * (idx-1)))
+        #   @labels << hour.strftime("%H:00") + " - " + next_hour.strftime("%H:00")
+        #   if by_timestamp[hour]
+        #     @traffic << by_timestamp[hour]
+        #   else
+        #     @traffic << 0
+        #   end
+        # end
+
+        # or the last 30 minutes
+        current_minute = Time.at(now.to_i - now.sec)
+        30.downto(0) do |idx|
+          start_minute = Time.at(current_minute.to_i - (60 * idx))
+          @labels << start_minute.strftime("%H:%M")
+          if by_timestamp[start_minute]
+            @traffic << by_timestamp[start_minute]
+          else
+            @traffic << 0
+          end
+        end
+      rescue => e
+        logger.warn "could not get traffic for #{@machine.name} : #{e.detail}"
+      end
     else
       @domains = []
     end
