@@ -55,7 +55,7 @@ class MachinesController < ApplicationController
           end
         end
       rescue => e
-        logger.warn "could not get traffic for #{@machine.name} : #{e.detail}"
+        logger.warn "could not get traffic for #{@machine.name} : #{e.message}"
       end
     else
       @domains = []
