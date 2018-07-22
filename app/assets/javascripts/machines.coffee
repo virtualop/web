@@ -59,3 +59,14 @@ $ ->
 
 
     $("#addServiceModal").modal("hide")
+
+  # graph interval
+  $(document).on "click", "#intervalDropdown .dropdown-item", (event) ->
+    interval = $(event.target).data("interval")
+    console.log("interval", interval)
+    machine = $(event.target).closest(".machine")
+    machineName = $(machine).data("machine")
+    console.log("machine", machineName)
+    $.get "/machines/traffic/#{machineName}?interval=#{interval}", (data) ->
+      console.log("new traffic data", data)
+      $("#trafficGraph").replaceWith(data)

@@ -17,34 +17,61 @@ class MachinesController < ApplicationController
         ! vhost["domain"].nil?
       end
 
-      begin
-        # index the aggregated data by timestamp
-        success = @machine.aggregate_access_log_tail(count: 250, interval: "minute")[:success]
-        #success = @machine.aggregate_access_log_tail(count: 250)[:success]
-        by_timestamp = {}
-        success.each do |entry|
-          by_timestamp[entry.first] = entry.last
-        end
+      traffic_data
+    else
+      @domains = []
+    end
+  end
 
-        @traffic = []
-        @labels = []
-        now = Time.now
+  def traffic
+    @machine = $vop.machines[params[:machine]]
+    traffic_data
 
+    render layout: nil
+  end
+
+  def traffic_data
+    begin
+      @interval = params[:interval] ? params[:interval].to_i : 30
+
+      # index the aggregated data by timestamp
+      success = []
+      if @interval == 360
+        success = @machine.aggregate_access_log_tail(count: 500)[:success]
+      elsif @interval == 30
+        logger.debug "fetching log data for #{@machine.name}"
+        success = @machine.aggregate_access_log_tail(count: 500, interval: "minute")[:success]
+      end
+
+      by_timestamp = {}
+      success.each do |entry|
+        by_timestamp[entry.first] = entry.last
+      end
+
+      @traffic = []
+      @labels = []
+      now = Time.now
+
+      logger.debug "interval : #{@interval}"
+
+      if @interval == 360
         # we want the last 6 hours
-        # current_hour = Time.at(now.to_i - now.sec - (now.min * 60))
-        # 5.downto(0) do |idx|
-        #   hour = Time.at(current_hour.to_i - (60 * 60 * idx))
-        #   next_hour = Time.at(current_hour.to_i - (60 * 60 * (idx-1)))
-        #   @labels << hour.strftime("%H:00") + " - " + next_hour.strftime("%H:00")
-        #   if by_timestamp[hour]
-        #     @traffic << by_timestamp[hour]
-        #   else
-        #     @traffic << 0
-        #   end
-        # end
-
+        current_hour = Time.at(now.to_i - now.sec - (now.min * 60))
+        logger.debug "current hour : #{current_hour}"
+        5.downto(0) do |idx|
+          hour = Time.at(current_hour.to_i - (60 * 60 * idx))
+          next_hour = Time.at(current_hour.to_i - (60 * 60 * (idx-1)))
+          @labels << hour.strftime("%H:00") + " - " + next_hour.strftime("%H:00")
+          if by_timestamp[hour]
+            @traffic << by_timestamp[hour]
+          else
+            @traffic << 0
+          end
+        end
+      elsif @interval == 30
         # or the last 30 minutes
         current_minute = Time.at(now.to_i - now.sec)
+        logger.debug "current minute : #{current_minute}"
         30.downto(0) do |idx|
           start_minute = Time.at(current_minute.to_i - (60 * idx))
           @labels << start_minute.strftime("%H:%M")
@@ -54,11 +81,10 @@ class MachinesController < ApplicationController
             @traffic << 0
           end
         end
-      rescue => e
-        logger.warn "could not get traffic for #{@machine.name} : #{e.message}"
       end
-    else
-      @domains = []
+    rescue => e
+      logger.warn "could not get traffic for #{@machine.name} : #{e.message}"
+      logger.debug e.backtrace.join("\n")
     end
   end
 

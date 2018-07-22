@@ -1,32 +1,51 @@
-<div class="canvas-wrapper col col-12">
-  <canvas id="myChart"></canvas>
-</div>
-<script>
-var ctx = document.getElementById("myChart").getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'line',
-    responsive: true,
-    maintainAspectRatio: false,
-    data: {
-        labels: <%= raw @labels %>,
-        datasets: [{
-            label: '# of successful calls',
-            data: <%= @traffic %>,
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            borderColor: 'rgba(255, 206, 86, 1)',
-            pointBackgroundColor: 'rgba(255, 206, 86, 1)',
-            pointBorderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
+<div class="wrapper col col-6" id="trafficGraph">
+  <div class="content">
+    <h2>Traffic</h2>
+
+    <div class="dropdown" id="intervalDropdown" data-interval="<%= @interval %>">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="intervalDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <%= @interval %> minutes
+      </button>
+      <div class="dropdown-menu" aria-labelledby="intervalDropdownButton">
+        <a class="dropdown-item" data-interval="30" href="#">30 minutes</a>
+        <a class="dropdown-item" data-interval="360" href="#">6 hours</a>
+      </div>
+    </div>
+
+    <div class="canvas-wrapper">
+      <canvas id="myChart"></canvas>
+    </div>
+    <script>
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        responsive: true,
+        maintainAspectRatio: false,
+        data: {
+            labels: <%= raw @labels %>,
+            datasets: [{
+                label: '# of successful calls',
+                data: <%= @traffic %>,
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                pointBackgroundColor: 'rgba(255, 206, 86, 1)',
+                pointBorderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
             }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            },
+            legend: {
+              position: "bottom"
+            }
         }
-    }
-});
-</script>
+    });
+    </script>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-<div id="machine" class="container-fluid">
+<div id="machine" class="container-fluid machine" data-machine="<%= @machine.name %>">
   <div class="row">
     <div class="col col-12">
       <h1><%= @machine.name %></h1>
@@ -23,9 +23,7 @@
 
   <% if @services && @services.include?("apache.apache") %>
   <div class="row">
-    <div class="col col-md-8">
-      <%= render partial: "graph" %>
-    </div>
+    <%= render partial: "graph" %>
   </div>
   <% end %>
 
