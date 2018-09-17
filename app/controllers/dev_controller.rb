@@ -1,3 +1,5 @@
+include ERB::Util
+
 class DevController < ApplicationController
 
   def reset
@@ -50,7 +52,7 @@ class DevController < ApplicationController
       "working_copy" => working_copy_path(),
       "path_fragment" => params[:file] || ""
     )
-    render plain: result
+    render plain: html_escape(result)
   end
 
   def new_diff

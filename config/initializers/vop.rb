@@ -1,7 +1,6 @@
 $vop = Vop.setup
 
 domain_root = ENV.fetch("VOP_DOMAIN") {
-  default_domain = "localhost:3000"
   $logger.debug "no vop domain configured"
   nil
 }
