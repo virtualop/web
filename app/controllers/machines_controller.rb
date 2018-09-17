@@ -10,8 +10,14 @@ class MachinesController < ApplicationController
 
     @scan = @machine.scan_result
 
-    services_data
+    # services
+    begin
+      services_data
+    rescue => e
+      logger.warn "could not fetch services : #{e.message}"
+    end
 
+    # traffic
     if @services && @services.include?("apache.apache")
       @domains = @machine.vhosts.select do |vhost|
         ! vhost["domain"].nil?
@@ -20,6 +26,10 @@ class MachinesController < ApplicationController
       traffic_data
     else
       @domains = []
+    end
+
+    if params[:tab]
+      logger.info "doing things specific to #{params[:tab]}"
     end
   end
 
@@ -34,21 +44,34 @@ class MachinesController < ApplicationController
     begin
       @interval = params[:interval] ? params[:interval].to_i : 30
 
-      # index the aggregated data by timestamp
-      success = []
-      if @interval == 360
-        success = @machine.aggregate_access_log_tail(count: 500)[:success]
-      elsif @interval == 30
-        logger.debug "fetching log data for #{@machine.name}"
-        success = @machine.aggregate_access_log_tail(count: 500, interval: "minute")[:success]
+      logger.debug "fetching log data for #{@machine.name}"
+
+      interval = "hour"
+      if @interval == 30
+        interval = "minute"
       end
 
-      by_timestamp = {}
+      # index the aggregated data by timestamp (and store them by result)
+      @parsed = @machine.tail_and_parse_access_log(count: 500)
+      aggregated = $vop.aggregate_logdata(data: @parsed, interval: interval)
+
+      histogram = {
+        success: {},
+        failed: {}
+      }
+
+      success = aggregated[:success] || []
       success.each do |entry|
-        by_timestamp[entry.first] = entry.last
+        histogram[:success][entry.first] = entry.last
       end
 
-      @traffic = []
+      failed = aggregated[:failure] || []
+      failed.each do |entry|
+        histogram[:failed][entry.first] = entry.last
+      end
+
+      @success = []
+      @failed = []
       @labels = []
       now = Time.now
 
@@ -62,10 +85,17 @@ class MachinesController < ApplicationController
           hour = Time.at(current_hour.to_i - (60 * 60 * idx))
           next_hour = Time.at(current_hour.to_i - (60 * 60 * (idx-1)))
           @labels << hour.strftime("%H:00") + " - " + next_hour.strftime("%H:00")
-          if by_timestamp[hour]
-            @traffic << by_timestamp[hour]
+
+          if histogram[:success][hour]
+            @success << histogram[:success][hour]
           else
-            @traffic << 0
+            @success << 0
+          end
+
+          if histogram[:failed][hour]
+            @failed << histogram[:failed][hour]
+          else
+            @failed << 0
           end
         end
       elsif @interval == 30
@@ -75,10 +105,17 @@ class MachinesController < ApplicationController
         30.downto(0) do |idx|
           start_minute = Time.at(current_minute.to_i - (60 * idx))
           @labels << start_minute.strftime("%H:%M")
-          if by_timestamp[start_minute]
-            @traffic << by_timestamp[start_minute]
+
+          if histogram[:success][start_minute]
+            @success << histogram[:success][start_minute]
           else
-            @traffic << 0
+            @success << 0
+          end
+
+          if histogram[:failed][start_minute]
+            @failed << histogram[:failed][start_minute]
+          else
+            @failed << 0
           end
         end
       end
@@ -89,6 +126,8 @@ class MachinesController < ApplicationController
   end
 
   def services_data
+    @installables = []
+
     @machine = $vop.machines[params[:machine]]
     @services = @machine.detect_services.sort
     @installables = $vop.services

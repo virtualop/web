@@ -1,0 +1,27 @@
+<div class="wrapper col col-12" id="trafficGraph">
+  <div class="content">
+    <h2>Log</h2>
+
+    <div id="log">
+      <table>
+        <thead>
+          <td class="timestamp">Timestamp</td>
+          <td>IP</td>
+          <td>Status</td>
+          <td>Request</td>
+        </thead>
+        <tbody>
+          <% @parsed.reverse.each do |line| %>
+          <tr>
+            <td><%= Time.at(line[:timestamp_unix]).strftime("%d.%m.%Y %H:%M:%S") %></td>
+            <td><%= line[:remote_ip] %></td>
+            <td><%= line[:status] %></td>
+            <td><%= line[:request] %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

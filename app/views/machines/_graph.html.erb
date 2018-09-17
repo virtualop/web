@@ -1,7 +1,13 @@
-<div class="wrapper col col-6" id="trafficGraph">
+<%
+time_picker ||= false
+show_legend ||= false
+%>
+
+<div class="wrapper col col-4" id="trafficGraph">
   <div class="content">
     <h2>Traffic</h2>
 
+    <% if time_picker %>
     <div class="dropdown" id="intervalDropdown" data-interval="<%= @interval %>">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="intervalDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <%= @interval %> minutes
@@ -11,6 +17,7 @@
         <a class="dropdown-item" data-interval="360" href="#">6 hours</a>
       </div>
     </div>
+    <% end %>
 
     <div class="canvas-wrapper">
       <canvas id="myChart"></canvas>
@@ -25,13 +32,23 @@
             labels: <%= raw @labels %>,
             datasets: [{
                 label: '# of successful calls',
-                data: <%= @traffic %>,
+                data: <%= @success %>,
                 backgroundColor: 'rgba(255, 206, 86, 0.2)',
                 borderColor: 'rgba(255, 206, 86, 1)',
                 pointBackgroundColor: 'rgba(255, 206, 86, 1)',
                 pointBorderColor: 'rgba(255, 206, 86, 1)',
                 borderWidth: 1
-            }]
+            },
+            {
+                label: '# of failed calls',
+                data: <%= @failed %>,
+                backgroundColor: 'rgba(255, 16, 16, 0.2)',
+                borderColor: 'rgba(255, 16, 16, 1)',
+                pointBackgroundColor: 'rgba(255, 16, 16, 1)',
+                pointBorderColor: 'rgba(255, 16, 16, 1)',
+                borderWidth: 1
+            }
+          ]
         },
         options: {
             scales: {
@@ -42,6 +59,7 @@
                 }]
             },
             legend: {
+              display: <%= show_legend %>,
               position: "bottom"
             }
         }

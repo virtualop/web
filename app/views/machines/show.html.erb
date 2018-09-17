@@ -18,14 +18,21 @@
     <% if @ssh_status %>
       <%= render partial: "disk" %>
       <%= render partial: "memory" %>
+      <% if @services && @services.include?("apache.apache") %>
+        <%= render partial: "graph", locals: { time_picker: false } %>
+      <% end %>
     <% end %>
   </div>
 
-  <% if @services && @services.include?("apache.apache") %>
+  <% if false && @services && @services.include?("apache.apache") %>
   <div class="row">
     <%= render partial: "graph" %>
   </div>
   <% end %>
+
+  <div class="row">
+    <%= render partial: "log" %>
+  </div>
 
   <% if @scan["packages"] && @scan["packages"].size > 0 %>
   <div class="row">

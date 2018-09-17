@@ -10,7 +10,8 @@ Rails.application.routes.draw do
   get 'machines' => 'machines#index'
   get 'machines/index'
   get 'machines/scan/:machine', to: 'machines#scan', machine: /[^\/]+/
-  get 'machines/show/:machine', to: 'machines#show', machine: /[^\/]+/
+  # get 'machines/show/:machine', to: 'machines#show', machine: /[^\/]+/
+  get 'machines/show/:machine(/:tab)', to: 'machines#show', machine: /[^\/]+/, tab: /[^\/]+/
   get 'machines/services/:machine', to: 'machines#services', machine: /[^\/]+/
   get 'machines/traffic/:machine', to: 'machines#traffic', machine: /[^\/]+/
   # deprecated:

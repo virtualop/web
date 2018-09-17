@@ -70,6 +70,10 @@ $border-width: 2px;
     min-width: 50px;
   }
 
+  #log thead td.timestamp {
+    min-width: 160px;
+  }
+
 }
 
 #addServiceModal .params.container {
