@@ -6,27 +6,45 @@ detailWindow = (event) ->
 addChange = (change, target) ->
   checkbox = $('<input type="checkbox" />').data("path", change.path)
   checkboxSpan = $("<span />").append(checkbox)
+
+  detail = $(target).closest(".working-copy-detail")
+
   addDiv = $("<div />")
   addDiv.html("add")
   addDiv.addClass("add-file")
   addDiv.data("path", change.path)
-  detail = $(target).closest(".working-copy-detail")
   addDiv.data("working_copy", detail.data("name"))
   addDiv.data("detail", detail)
+
+  discardDiv = $("<div />")
+  discardDiv.html("discard")
+  discardDiv.addClass("discard-change")
+  discardDiv.data("path", change.path)
+  discardDiv.data("working_copy", detail.data("name"))
+  discardDiv.data("detail", detail)
+
+  popover = $("<div />")
+  popover.append(addDiv)
+  popover.append(discardDiv)
+
   statusSpan = $("<span />")
     .addClass("status")
     .html(change.raw)
     .data("container", "#dev-wrap")
-    .popover(content: addDiv, html: true)
+    .popover(content: popover, html: true)
+
   titleDiv = $("<div />").addClass("title")
     .append checkboxSpan
     .append statusSpan
     .append $("<span />").addClass("path").html(change.path)
+
   detailDiv = $("<div />").addClass("detail")
+
   changeDiv = $("<div />").addClass("change")
     .data("path", change.path)
     .append titleDiv
     .append detailDiv
+
   $(target).append changeDiv
 
 processChanges = (detail, data) ->
@@ -135,6 +153,24 @@ $ ->
         $.get "/dev/git_status/" + workingCopy + "?refresh=true", (newData) ->
           processChanges(detail, newData)
 
+  # discard change
+  $("#dev-wrap").on "click", ".discard-change", (event) ->
+    console.log("about to discard change")
+    discardChange = event.currentTarget
+    workingCopy = $(discardChange).data("working_copy")
+    detail = $(discardChange).data("detail")
+    console.log("discarding changed file", discardChange)
+    console.log("path", $(discardChange).data("path"))
+    console.log("workingCopy", workingCopy)
+    $.post "/dev/discard_change/" + workingCopy + "/" + $(discardChange).data("path"),
+      authenticity_token: $('[name="csrf-token"]')[0].content,
+      (data) ->
+        console.log("discarded change to file " + $(discardChange).data("path"))
+        $("#dev-wrap .popover").popover("hide")
+        $.get "/dev/git_status/" + workingCopy + "?refresh=true", (newData) ->
+          processChanges(detail, newData)
+
+  # commit form
   $("#dev-wrap").on "click", ".working-copy-detail .selection-buttons .commit-button", (event) ->
     detail = $(event.currentTarget).closest(".working-copy-detail")
     console.log("showing commit form, working copy", detail.data("name"))

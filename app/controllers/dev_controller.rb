@@ -71,6 +71,14 @@ class DevController < ApplicationController
     )
   end
 
+  def discard_change
+    $vop.discard_change(
+      machine: "localhost",
+      "working_copy" => working_copy_path(),
+      "file_name" => params[:file]
+    )
+  end
+
   def commit
     new_status = $vop.commit_changes(
       machine: "localhost",

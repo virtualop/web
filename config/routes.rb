@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   get 'dev/git_status/:working_copy' => 'dev#git_status'
   post 'dev/commit' => 'dev#commit'
   post 'dev/add_file/:working_copy/:file' => 'dev#add_file', file: /.+/
+  post 'dev/discard_change/:working_copy/:file' => 'dev#discard_change', file: /.+/
 
   get 'log' => 'log#index'
   get 'log/index'

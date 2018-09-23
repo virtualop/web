@@ -18,7 +18,7 @@
             <td><%= line[:status] %></td>
             <td><%= line[:request] %></td>
           </tr>
-          <% end %>
+          <% end unless @parsed.nil? %>
         </tbody>
       </table>
     </div>
