@@ -11,6 +11,24 @@ addParam = (param) ->
     .append(input_span)
   $("#addServiceModal .params.container").append(param_div)
 
+addTailLine = (line) ->
+  console.log("adding line", line)
+  date = new Date(line.timestamp_unix * 1000)
+  timestamp = date
+    .toLocaleString('de-DE', month: "2-digit", year: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric")
+    .replace /,/, ""
+  new_tr = $('<tr>')
+    .append( $('<td>').append(timestamp) )
+    .append( $('<td>').append(line.remote_ip) )
+    .append( $('<td>').append(line.status) )
+    .append( $('<td>').append(line.request) )
+  $("#trafficLog tbody").prepend(new_tr)
+
+addTail = (input) ->
+  console.log("adding tail", input)
+  if input != null
+    addTailLine(line) for line in input["content"]
+
 $ ->
   # scan
   $(".scan-button").click (event) ->
@@ -70,3 +88,11 @@ $ ->
     $.get "/machines/traffic/#{machineName}?interval=#{interval}", (data) ->
       console.log("new traffic data", data)
       $("#trafficGraph").replaceWith(data)
+
+  # log tail
+  trafficLog = $("#trafficLog")
+  if trafficLog != null
+    App.tailChannel = App.cable.subscriptions.create { channel: "TailChannel", machine: $("#machine").data("machine"), log: "/var/log/apache2/access.log" },
+      received: (json_data) ->
+        tail = JSON.parse(json_data)
+        addTail(tail)

@@ -24,15 +24,11 @@
     <% end %>
   </div>
 
-  <% if false && @services && @services.include?("apache.apache") %>
-  <div class="row">
-    <%= render partial: "graph" %>
-  </div>
-  <% end %>
-
+  <% if @services && @services.include?("apache.apache") %>
   <div class="row">
     <%= render partial: "log" %>
   </div>
+  <% end %>
 
   <% if @scan["packages"] && @scan["packages"].size > 0 %>
   <div class="row">
