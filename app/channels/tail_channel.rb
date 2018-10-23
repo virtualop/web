@@ -6,8 +6,8 @@ class TailChannel < ApplicationCable::Channel
 
   def subscribed
     logger.info "subscribed to tail for #{params[:log]}@#{params[:machine]}"
-    # TODO stop tailing at some point
-    $vop.tailf_async(machine: params[:machine], file: params[:log], sudo: true)
+    $vop.kill_old_tails(machine: params[:machine])
+    $vop.tailf_async(machine: params[:machine], file: params[:log], count: 0, sudo: true)
     stream_from "tail_#{params[:machine]}_#{params[:log]}"
   end
 

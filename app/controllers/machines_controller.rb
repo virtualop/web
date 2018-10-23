@@ -77,6 +77,7 @@ class MachinesController < ApplicationController
 
       logger.debug "interval : #{@interval}"
 
+      @last_bucket = nil
       if @interval == 360
         # we want the last 6 hours
         current_hour = Time.at(now.to_i - now.sec - (now.min * 60))
@@ -85,6 +86,7 @@ class MachinesController < ApplicationController
           hour = Time.at(current_hour.to_i - (60 * 60 * idx))
           next_hour = Time.at(current_hour.to_i - (60 * 60 * (idx-1)))
           @labels << hour.strftime("%H:00") + " - " + next_hour.strftime("%H:00")
+          # TODO @last_bucket = hour.to_i if @last_bucket.nil?
 
           if histogram[:success][hour]
             @success << histogram[:success][hour]
@@ -105,6 +107,7 @@ class MachinesController < ApplicationController
         30.downto(0) do |idx|
           start_minute = Time.at(current_minute.to_i - (60 * idx))
           @labels << start_minute.strftime("%H:%M")
+          @last_bucket = start_minute.to_i
 
           if histogram[:success][start_minute]
             @success << histogram[:success][start_minute]
