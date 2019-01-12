@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'map/account/:account', to: 'map#account'
   get 'map/group'
   get 'map/host'
-  get 'map/host_fragment'
+  # get 'map/host_fragment'
 
   get 'machines' => 'machines#index'
   get 'machines/index'
@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   get 'map/account'
 
   get 'map/host/:machine', to: 'map#host', machine: /[^\/]+/
-  get 'map/host_fragment/:machine', to: 'map#host_fragment', machine: /[^\/]+/
+  # get 'map/host_fragment/:machine', to: 'map#host_fragment', machine: /[^\/]+/
   get 'map/group/:name', to: 'map#group'
   post 'map/:machine/new_vm', to: 'map#new_vm', machine: /[^\/]+/
 
