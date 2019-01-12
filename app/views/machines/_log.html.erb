@@ -13,7 +13,7 @@
         <tbody>
           <% @parsed.reverse.each do |line| %>
           <tr>
-            <td><%= Time.at(line[:timestamp_unix]).strftime("%d.%m.%Y %H:%M:%S") %></td>
+            <td><%= line[:formatted_timestamp] %></td>
             <td><%= line[:remote_ip] %></td>
             <td><%= line[:status] %></td>
             <td><%= line[:request] %></td>

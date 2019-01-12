@@ -46,13 +46,19 @@ class MachinesController < ApplicationController
 
       logger.debug "fetching log data for #{@machine.name}"
 
-      interval = "hour"
-      if @interval == 30
-        interval = "minute"
+      interval = if @interval == 30
+        "minute"
+      else
+        "hour"
       end
 
-      # index the aggregated data by timestamp (and store them by result)
-      @parsed = @machine.tail_and_parse_access_log(count: 500)
+      # read the last lines of the access log
+      @parsed = @machine.tail_and_parse_access_log(count: 500).map do |line|
+        line[:formatted_timestamp] = Time.at(line[:timestamp_unix]).strftime("%d.%m.%Y %H:%M:%S")
+        line
+      end
+
+      # index the aggregated data by timestamp (and store by result)
       aggregated = $vop.aggregate_logdata(data: @parsed, interval: interval)
 
       histogram = {
@@ -154,6 +160,9 @@ class MachinesController < ApplicationController
     if params[:memory]
       p[:memory] = params[:memory]
     end
+    if params[:disk]
+      p[:disk_size] = params[:disk]
+    end
     request = ::Vop::Request.new $vop, "new_machine", p
     $vop.execute_async(request)
   end
@@ -195,8 +204,8 @@ class MachinesController < ApplicationController
   end
 
   def scan
-    $vop.inspect_async(params[:machine]).to_json
-    render json: {status: "scan has been scheduled"}.to_json
+    $vop.inspect_async(params[:machine])
+    render json: { status: "scan has been scheduled" }.to_json
   end
 
 end

@@ -64,17 +64,24 @@
           </button>
         </div>
         <div class="modal-body">
-          <span>memory:</span>
-          <button type="button" id="dropdownMenuButton"
-            class="btn btn-secondary dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">512</button>
-          <div class="dropdown-menu memory" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#" data-mb="512">512</a>
-            <a class="dropdown-item" href="#" data-mb="1024">1024</a>
-            <a class="dropdown-item" href="#" data-mb="2048">2048</a>
+          <div class="form-group">
+            <span>memory:</span>
+            <button type="button" id="dropdownMenuButton"
+              class="btn btn-secondary dropdown-toggle"
+              data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">512</button>
+            <div class="dropdown-menu memory" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#" data-mb="512">512</a>
+              <a class="dropdown-item" href="#" data-mb="1024">1024</a>
+              <a class="dropdown-item" href="#" data-mb="2048">2048</a>
+            </div>
+            <span>MB</span>
           </div>
-          <span>MB</span>
+          <div>
+            <span>disk:</span>
+            <input id="diskSize" type="number" value="25" />
+            <span>GB</span>
+          </div>
         </div>
       </div>
     </div>
