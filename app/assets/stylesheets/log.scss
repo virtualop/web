@@ -1,3 +1,33 @@
 // Place all the styles related to the log controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#origin {
+  height: 40px;
+  padding: 5px;
+
+  display: flex;
+  flex-direction: row;
+
+  div.origin {
+    height: 30px;
+
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 5px;
+
+    border: 1px solid grey;
+    opacity: 0.5;
+  }
+
+  div.origin.enabled {
+      opacity: 1;
+  }
+
+}
+
+#log {
+  // overflow-y: scroll;
+  padding-left: 2px;
+  padding-top: 5px;
+}

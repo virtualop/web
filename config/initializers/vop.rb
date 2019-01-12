@@ -1,4 +1,4 @@
-$vop = Vop.setup
+$vop = Vop.setup(origin: "web:#{Process.pid}@#{`hostname`.strip}")
 
 domain_root = ENV.fetch("VOP_DOMAIN") {
   $logger.debug "no vop domain configured"

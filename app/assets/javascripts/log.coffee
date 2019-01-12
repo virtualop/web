@@ -10,14 +10,49 @@ addCommandDiv = (data) ->
   if key_count > 0
     params.html(JSON.stringify(data["params"]))
 
-  newDiv = $("<div/>").append(command)
-  newDiv.append(params)
+  newDiv = $("<div/>")
+    .append(command)
+    .append(params)
   newDiv.addClass("command")
   newDiv.attr("id", data["id"])
+  newDiv.data("origin", data["origin"])
   newDiv.css("margin-left", data["level"] * 2 + "px")
   $("#log").append(newDiv)
+
   h = $("#log").height()
   $(".content-body").first().scrollTop(h)
+
+updateCommandDiv = (data) ->
+  command = $("##{data["id"]}")
+  span = $(command).find('span').first()
+  span.html("[#{data["status"]}] " + span.html())
+
+handleOrigin = (data) ->
+  for_id = data.origin.replace("@", "_").replace(":", "_")
+
+  existing = $("#origin div#" + for_id)
+  if (existing.length > 0)
+    console.log("origin div exists already, update", existing.first())
+  else
+    titleSpan = $("<span />").html(data.origin)
+    originDiv = $("<div/>")
+      .append(titleSpan)
+      .attr("id", for_id)
+      .addClass("origin")
+      .addClass("enabled")
+    $("#origin").append(originDiv)
+
+maybeToggle = (div, origin) ->
+  div_origin = $(div).data("origin")
+  if (div_origin == origin)
+    console.log("toggling div with origin", div_origin)
+    $(div).toggle()
+
+toggleOrigin = (span) ->
+  origin = $(span).html()
+  originDiv = $(span).closest(".origin")
+  originDiv.toggleClass("enabled")
+  maybeToggle(d, origin) for d in $("#log div")
 
 App.listen_for_vop_log = ->
   console.log "starting to listen for vop_log"
@@ -26,9 +61,13 @@ App.listen_for_vop_log = ->
       data = JSON.parse(json_data)
       console.log(data)
 
-      if data["state"] == "before"
+      handleOrigin(data)
+
+      if data["phase"] == "before"
         addCommandDiv(data)
       else
-        command = $("##{data["id"]}")
-        span = $(command).find('span').first()
-        span.html("[#{data["status"]}] " + span.html())
+        updateCommandDiv(data)
+
+$ ->
+  $("#origin").on "click", "span", (event) ->
+    toggleOrigin(event.target)
