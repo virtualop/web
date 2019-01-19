@@ -32,10 +32,4 @@ class MapController < ApplicationController
     @vms = helpers.host_data()
   end
 
-  # def host_fragment
-  #   helpers.host_data()
-  #
-  #   render partial: "host"
-  # end
-
 end

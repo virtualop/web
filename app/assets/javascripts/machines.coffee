@@ -3,7 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 addParam = (param) ->
-  # console.log("adding param ", param)
   label_span = $('<span class="label" />').append(param.name + " : ")
   input_span = $('<span class="input_wrap"><input type="text" name="' + param.name + '" /></span>')
   param_div = $('<div class="param" />')
@@ -12,7 +11,6 @@ addParam = (param) ->
   $("#addServiceModal .params.container").append(param_div)
 
 addTailLine = (line) ->
-  # console.log("adding line", line)
   date = new Date(line.timestamp_unix * 1000)
   timestamp = date
     .toLocaleString('de-DE', month: "2-digit", year: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric")
@@ -25,7 +23,6 @@ addTailLine = (line) ->
   $("#trafficLog tbody").prepend(new_tr)
 
 addTail = (input) ->
-  # console.log("adding tail", input)
   if input != null
     addTailLine(line) for line in input["content"]
 
@@ -111,24 +108,28 @@ $ ->
               lastBucket = $("#trafficGraph").data("last-bucket")
               console.log("last bucket", lastBucket)
 
+              line = myChart.data.datasets[0].data
               if lastBucket == timestamp
-                console.log("adding to last bucket")
-                line = myChart.data.datasets[0].data
-                idx = line.length-1
+                idx = line.length - 1
                 line[idx] = line[idx] + value
-                console.log("current value", line[line.length-1])
+                console.log("adding to last bucket, current value", line[idx])
               else
                 distance = timestamp - lastBucket
                 console.log("distance", distance)
                 if (distance > 60)
                   count = (distance / 60) - 1
-                  console.log("need to fill up buckets", count)
+                  console.log("need to fill up " + count + " buckets", line)
+                  line.shift() for idx in [count..1]
+                  line.push(0) for idx in [count..1]
+                  console.log("line now", line)
 
                 console.log("setting lastBucket", timestamp)
                 $("#trafficGraph").data("last-bucket", timestamp)
-                myChart.data.datasets[0].data.push(value)
+                line.push(value)
+                line.shift()
                 d = new Date(0)
                 d.setUTCSeconds(timestamp)
                 myChart.data.labels.push(d.toLocaleString('de-DE', hour: '2-digit', minute: '2-digit'))
 
+              console.log("updating chart")
               myChart.update()

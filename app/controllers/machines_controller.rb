@@ -172,7 +172,7 @@ class MachinesController < ApplicationController
 
   def service_icon
     service = $vop.services.select { |x| x.name == params[:service] }.first
-    icon_path = File.join(service.plugin.plugin_dir("files"), service.data[:icon])
+    icon_path = File.join(service.plugin.plugin_dir("files"), service.data["icon"])
 
     if icon_path
       send_data open(icon_path, "rb") { |f| f.read }
