@@ -8,6 +8,17 @@ class DevController < ApplicationController
 
   def index
     @working_copies = $vop.working_copies_with_detail(machine: "localhost")
+    render :index
+  end
+
+  def refresh
+    machine = $vop.machines["localhost"]
+    machine.list_working_copies.each do |working_copy|
+      machine.current_revision!("working_copy" => working_copy[:path])
+      machine.git_status!("working_copy" => working_copy[:path])
+    end
+
+    index
   end
 
   def git_pull

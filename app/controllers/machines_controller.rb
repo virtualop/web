@@ -6,9 +6,10 @@ class MachinesController < ApplicationController
 
   def show
     @machine = $vop.machines[params[:machine]]
-    @ssh_status = @machine.test_ssh
+    #@ssh_status = @machine.test_ssh
 
     @scan = @machine.scan_result
+    @ssh_status = @scan["ssh_status"]
 
     # services
     begin

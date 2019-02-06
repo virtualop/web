@@ -177,11 +177,15 @@ $ ->
     $("#commitModal textarea[name=comment]").val("")
     $("#commitModal form input[name=working_copy]").val(detail.data("name"))
     $("#commitModal form").data("detail", detail)
+
+    labels = $("#commitModal form div.file_labels")
+    labels.html("")
     files = $("#commitModal form div.files")
     files.html("")
     $(detail).find(".change input[type=checkbox]:checked").each (idx, value) ->
       console.log("path", $(value).data("path"))
-      files.append $('<input type="text" name="file[]" value="' + $(value).data("path") + '" />')
+      files.append $('<input type="hidden" name="file[]" value="' + $(value).data("path") + '" />')
+      labels.append $('<div>' + $(value).data("path") + '</div>')
 
   # commit
   $("#dev-wrap #commitModal").on "click", ".commit-button", (event) ->
