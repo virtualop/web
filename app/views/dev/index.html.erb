@@ -1,39 +1,16 @@
 <div id="dev-wrap">
-  <h1>dev</h1>
+  <div id="title-wrap">
+    <div id="header-wrap">
+      <h1>dev</h1>
+    </div>
+    <div id="buttons">
+      <a class="btn btn-primary" href="/dev/refresh" data-turbolinks="false" role="button">refresh</a>
+    </div>
+  </div>
 
   <% @working_copies.each do |working_copy| %>
     <%= render partial: "working_copy", locals: { :working_copy => working_copy } %>
     <%= render partial: "working_copy_detail", locals: { :working_copy => working_copy } %>
   <% end %>
-  <div class="modal fade" id="commitModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalLabel">Commit</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col">
-              <form action="/dev/commit" method="post">
-                <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token.to_s %>" />
-                <input type="hidden" name="working_copy" />
-                <div class="title">Would you care to add a comment?</div>
-                <textarea name="comment" rows="5" cols="40" placeholder="say something"></textarea>
-                <div class="files">
-
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary commit-button">Commit</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render partial: "commit_modal" %>
 </div>

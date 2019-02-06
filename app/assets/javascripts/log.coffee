@@ -28,7 +28,7 @@ updateCommandDiv = (data) ->
   span.html("[#{data["status"]}] " + span.html())
 
 handleOrigin = (data) ->
-  for_id = data.origin.replace("@", "_").replace(":", "_")
+  for_id = data.origin.replace(/@/g, "_").replace(/:/g, "_")
 
   existing = $("#origin div#" + for_id)
   if (existing.length > 0)
