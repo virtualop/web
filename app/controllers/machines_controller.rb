@@ -197,7 +197,7 @@ class MachinesController < ApplicationController
     p = {}
     params.each do |k,v|
       unless blacklist.include? k
-        p[k] = v
+        p[k] = v unless v.nil? || v == ""
       end
     end
 
