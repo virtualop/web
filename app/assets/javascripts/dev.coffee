@@ -198,5 +198,8 @@ $ ->
         processChanges(detail, data)
         $("#commitModal").modal("hide")
         $(detail).effect("highlight")
+        workingCopyDiv = $("#" + workingCopy)
+        pullButton = $(workingCopyDiv).find("button.pull-button")
+        pullButton.click()
 
   $('[data-toggle="popover"]').popover()
