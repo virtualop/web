@@ -43,15 +43,7 @@ class MachinesController < ApplicationController
 
   def traffic_data
     begin
-      @interval = params[:interval] ? params[:interval].to_i : 30
-
       logger.debug "fetching log data for #{@machine.name}"
-
-      interval = if @interval == 30
-        "minute"
-      else
-        "hour"
-      end
 
       # read the last lines of the access log
       @parsed = @machine.tail_and_parse_access_log(count: 500).map do |line|
@@ -60,6 +52,9 @@ class MachinesController < ApplicationController
       end
 
       # index the aggregated data by timestamp (and store by result)
+      @interval = params[:interval] ? params[:interval].to_i : 30
+      logger.debug "interval : #{@interval}"
+      interval = @interval == 30 ? "minute" : "hour"
       aggregated = $vop.aggregate_logdata(data: @parsed, interval: interval)
 
       histogram = {
@@ -81,8 +76,6 @@ class MachinesController < ApplicationController
       @failed = []
       @labels = []
       now = Time.now
-
-      logger.debug "interval : #{@interval}"
 
       @last_bucket = nil
       if @interval == 360

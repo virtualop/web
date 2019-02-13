@@ -23,8 +23,16 @@ addTailLine = (line) ->
   $("#trafficLog tbody").prepend(new_tr)
 
 addTail = (input) ->
-  if input != null
-    addTailLine(line) for line in input["content"]
+  if input != null && input["content"] != null
+    addTailLine(line) for line in input["content"] when line != null
+
+addBucket = (line, value, timestamp) ->
+  line.shift()
+  line.push(value)
+  d = new Date(0)
+  d.setUTCSeconds(timestamp)
+  myChart.data.labels.shift()
+  myChart.data.labels.push(d.toLocaleString('de-DE', hour: '2-digit', minute: '2-digit'))
 
 $ ->
   # scan
@@ -89,16 +97,14 @@ $ ->
   # log tail
   trafficLog = $("#trafficLog")
   if trafficLog.length > 0
-    console.log("found trafficLog, subscribing to tailChannel", trafficLog)
     App.tailChannel = App.cable.subscriptions.create { channel: "TailChannel", machine: $("#machine").data("machine"), log: "/var/log/apache2/access.log" },
       received: (json_data) ->
         tail = JSON.parse(json_data)
         addTail(tail)
-    console.log("subscribing to graphChannel")
+
     App.graphChannel = App.cable.subscriptions.create { channel: "GraphChannel", machine: $("#machine").data("machine"), log: "/var/log/apache2/access.log" },
       received: (json_data) ->
         graph = JSON.parse(json_data)
-        console.log("received graph update", graph)
         if graph.content.success && graph.content.success.length > 0
             graph.content.success.forEach (success) ->
               console.log("one success", success)
@@ -109,27 +115,26 @@ $ ->
               console.log("last bucket", lastBucket)
 
               line = myChart.data.datasets[0].data
+              console.log("checking lastBucket " + lastBucket + " vs. timestamp " + timestamp, line)
               if lastBucket == timestamp
                 idx = line.length - 1
                 line[idx] = line[idx] + value
                 console.log("adding to last bucket, current value", line[idx])
               else
-                distance = timestamp - lastBucket
-                console.log("distance", distance)
-                if (distance > 60)
-                  count = (distance / 60) - 1
-                  console.log("need to fill up " + count + " buckets", line)
-                  line.shift() for idx in [count..1]
-                  line.push(0) for idx in [count..1]
-                  console.log("line now", line)
+                if timestamp > lastBucket
+                  distance = timestamp - lastBucket
+                  console.log("distance", distance)
 
-                console.log("setting lastBucket", timestamp)
-                $("#trafficGraph").data("last-bucket", timestamp)
-                line.push(value)
-                line.shift()
-                d = new Date(0)
-                d.setUTCSeconds(timestamp)
-                myChart.data.labels.push(d.toLocaleString('de-DE', hour: '2-digit', minute: '2-digit'))
+                  if (distance > 60)
+                    count = (distance / 60) - 1
+                    console.log("need to fill up " + count + " buckets", line)
+                    addBucket(line, 0, timestamp - idx * 60) for idx in [count..1]
+                    console.log("line now", line)
 
-              console.log("updating chart")
+                  console.log("setting lastBucket", timestamp)
+                  $("#trafficGraph").data("last-bucket", timestamp)
+                  addBucket(line, value, timestamp)
+                else
+                  console.log("received data from the past", timestamp)
+
               myChart.update()
