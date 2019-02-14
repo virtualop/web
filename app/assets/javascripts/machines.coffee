@@ -1,7 +1,4 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
+# dynamically loaded parameters for the "add service" modal
 addParam = (param) ->
   label_span = $('<span class="label" />').append(param.name + " : ")
   input_span = $('<span class="input_wrap"><input type="text" name="' + param.name + '" /></span>')
@@ -10,6 +7,7 @@ addParam = (param) ->
     .append(input_span)
   $("#addServiceModal .params.container").append(param_div)
 
+# traffic log data that is received from ActionCable
 addTailLine = (line) ->
   date = new Date(line.timestamp_unix * 1000)
   timestamp = date
@@ -26,6 +24,7 @@ addTail = (input) ->
   if input != null && input["content"] != null
     addTailLine(line) for line in input["content"] when line != null
 
+# updated traffic graph (different ActionCable)
 addBucket = (line, value, timestamp) ->
   line.shift()
   line.push(value)
@@ -83,7 +82,7 @@ $ ->
 
     $("#addServiceModal").modal("hide")
 
-  # graph interval
+  # graph interval dropdown
   $(document).on "click", "#intervalDropdown .dropdown-item", (event) ->
     interval = $(event.target).data("interval")
     console.log("interval", interval)
@@ -93,6 +92,11 @@ $ ->
     $.get "/machines/traffic/#{machineName}?interval=#{interval}", (data) ->
       console.log("new traffic data", data)
       $("#trafficGraph").replaceWith(data)
+
+  $(document).on "wheel", "#trafficGraph canvas", (event) ->
+    original = event.originalEvent
+    console.log("deltaY", original.deltaY)
+    event.preventDefault()
 
   # log tail
   trafficLog = $("#trafficLog")
@@ -107,31 +111,20 @@ $ ->
         graph = JSON.parse(json_data)
         if graph.content.success && graph.content.success.length > 0
             graph.content.success.forEach (success) ->
-              console.log("one success", success)
               timestamp = success[0]
               value = success[1]
-              console.log("pushing onto dataset for timestamp " + timestamp + " : " + value, myChart.data.datasets[0].data)
               lastBucket = $("#trafficGraph").data("last-bucket")
-              console.log("last bucket", lastBucket)
-
               line = myChart.data.datasets[0].data
-              console.log("checking lastBucket " + lastBucket + " vs. timestamp " + timestamp, line)
               if lastBucket == timestamp
                 idx = line.length - 1
                 line[idx] = line[idx] + value
-                console.log("adding to last bucket, current value", line[idx])
               else
                 if timestamp > lastBucket
                   distance = timestamp - lastBucket
-                  console.log("distance", distance)
-
                   if (distance > 60)
                     count = (distance / 60) - 1
-                    console.log("need to fill up " + count + " buckets", line)
                     addBucket(line, 0, timestamp - idx * 60) for idx in [count..1]
-                    console.log("line now", line)
 
-                  console.log("setting lastBucket", timestamp)
                   $("#trafficGraph").data("last-bucket", timestamp)
                   addBucket(line, value, timestamp)
                 else

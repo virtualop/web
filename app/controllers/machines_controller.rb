@@ -38,7 +38,7 @@ class MachinesController < ApplicationController
     @machine = $vop.machines[params[:machine]]
     traffic_data
 
-    render layout: nil
+    render layout: nil, partial: "graph"
   end
 
   def traffic_data
@@ -84,9 +84,8 @@ class MachinesController < ApplicationController
         logger.debug "current hour : #{current_hour}"
         5.downto(0) do |idx|
           hour = Time.at(current_hour.to_i - (60 * 60 * idx))
-          next_hour = Time.at(current_hour.to_i - (60 * 60 * (idx-1)))
-          @labels << hour.strftime("%H:00") + " - " + next_hour.strftime("%H:00")
-          # TODO @last_bucket = hour.to_i if @last_bucket.nil?
+          @labels << hour.strftime("%H:00")
+          @last_bucket = hour.to_i if @last_bucket.nil?
 
           if histogram[:success][hour]
             @success << histogram[:success][hour]
