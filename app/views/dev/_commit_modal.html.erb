@@ -13,11 +13,11 @@
             <form action="/dev/commit" method="post">
               <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token.to_s %>" />
               <input type="hidden" name="working_copy" />
-              <h3>Files</h3>
+              <h3>Files:</h3>
               <div class="files"></div>
               <div class="file_labels"></div>
               <br/>
-              <div class="title">Would you care to add a comment?</div>
+              <h3>Comment:</h3>
               <textarea name="comment" rows="5" cols="40" placeholder="&hellip;"></textarea>
             </form>
           </div>

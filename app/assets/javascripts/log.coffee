@@ -19,10 +19,13 @@ addCommandDiv = (data) ->
   newDiv.css("margin-left", data["level"] * 2 + "px")
   $("#log").append(newDiv)
 
+  console.log "added newDiv", newDiv
+
   h = $("#log").height()
   $(".content-body").first().scrollTop(h)
 
 updateCommandDiv = (data) ->
+  console.log "updating div", data["id"]
   command = $("##{data["id"]}")
   span = $(command).find('span').first()
   span.html("[#{data["status"]}] " + span.html())
@@ -34,6 +37,7 @@ handleOrigin = (data) ->
   if (existing.length > 0)
     console.log("origin div exists already, update", existing.first())
   else
+    console.log "adding new originDiv", for_id
     titleSpan = $("<span />").html(data.origin)
     originDiv = $("<div/>")
       .append(titleSpan)

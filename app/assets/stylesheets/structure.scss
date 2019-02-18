@@ -21,9 +21,11 @@ body {
   overflow: auto;
 }
 
-.content {
+main.content {
   flex: 1;
   padding: 5px;
+  padding-left: 20px;
+  padding-top: 10px;
 }
 
 header {

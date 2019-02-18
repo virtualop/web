@@ -4,7 +4,8 @@
 
 #origin {
   height: 40px;
-  padding: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 
   display: flex;
   flex-direction: row;
@@ -12,9 +13,9 @@
   div.origin {
     height: 30px;
 
-    margin-left: 5px;
+    margin-left: 0;
     margin-right: 5px;
-    padding: 5px;
+    padding: 5px;    
 
     border: 1px solid grey;
     opacity: 0.5;
@@ -28,6 +29,6 @@
 
 #log {
   // overflow-y: scroll;
-  padding-left: 2px;
+  padding-left: 0px;
   padding-top: 5px;
 }

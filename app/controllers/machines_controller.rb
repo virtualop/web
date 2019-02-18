@@ -38,20 +38,12 @@ class MachinesController < ApplicationController
     @machine = $vop.machines[params[:machine]]
     traffic_data
 
-    render layout: nil
+    render layout: nil, partial: "graph"
   end
 
   def traffic_data
     begin
-      @interval = params[:interval] ? params[:interval].to_i : 30
-
       logger.debug "fetching log data for #{@machine.name}"
-
-      interval = if @interval == 30
-        "minute"
-      else
-        "hour"
-      end
 
       # read the last lines of the access log
       @parsed = @machine.tail_and_parse_access_log(count: 500).map do |line|
@@ -60,6 +52,9 @@ class MachinesController < ApplicationController
       end
 
       # index the aggregated data by timestamp (and store by result)
+      @interval = params[:interval] ? params[:interval].to_i : 30
+      logger.debug "interval : #{@interval}"
+      interval = @interval == 30 ? "minute" : "hour"
       aggregated = $vop.aggregate_logdata(data: @parsed, interval: interval)
 
       histogram = {
@@ -82,8 +77,6 @@ class MachinesController < ApplicationController
       @labels = []
       now = Time.now
 
-      logger.debug "interval : #{@interval}"
-
       @last_bucket = nil
       if @interval == 360
         # we want the last 6 hours
@@ -91,9 +84,8 @@ class MachinesController < ApplicationController
         logger.debug "current hour : #{current_hour}"
         5.downto(0) do |idx|
           hour = Time.at(current_hour.to_i - (60 * 60 * idx))
-          next_hour = Time.at(current_hour.to_i - (60 * 60 * (idx-1)))
-          @labels << hour.strftime("%H:00") + " - " + next_hour.strftime("%H:00")
-          # TODO @last_bucket = hour.to_i if @last_bucket.nil?
+          @labels << hour.strftime("%H:00")
+          @last_bucket = hour.to_i if @last_bucket.nil?
 
           if histogram[:success][hour]
             @success << histogram[:success][hour]
@@ -198,7 +190,7 @@ class MachinesController < ApplicationController
     p = {}
     params.each do |k,v|
       unless blacklist.include? k
-        p[k] = v
+        p[k] = v unless v.nil? || v == ""
       end
     end
 
