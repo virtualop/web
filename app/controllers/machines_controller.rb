@@ -184,6 +184,7 @@ class MachinesController < ApplicationController
 
   def service_params
     service = $vop.services.select { |x| x.name == params[:service] }.first
+    pp service
 
     render json: service.data["params"].to_json()
   end

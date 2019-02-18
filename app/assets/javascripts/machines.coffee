@@ -40,7 +40,6 @@ $ ->
 
   # addServiceModal
   $("#addServiceModal").on "show.bs.modal", (event) ->
-    console.log("showing service modal", event)
     $("#addServiceModal #dropdownMenuButton").text("select service")
     $("#addServiceModal .params.container").html("")
 
