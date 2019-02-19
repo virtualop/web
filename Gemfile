@@ -43,6 +43,8 @@ gem 'bower-rails'
 gem 'jquery-rails'
 gem 'bootstrap', '~> 4.1.0'
 
+gem 'devise'
+
 gem 'vop', path: '../vop'
 
 group :development, :test do
