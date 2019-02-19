@@ -12,4 +12,11 @@
     <% end %>
     <i class="fa fa-wrench" data-toggle="menu"></i>
   </span>
+  <% if user_signed_in? %>
+  <span class="item">
+    <%= link_to destroy_user_session_path, method: :delete do %>
+      <i class="fa fa-sign-out-alt"></i>
+    <% end %>
+  </span>
+  <% end %>
 </span>

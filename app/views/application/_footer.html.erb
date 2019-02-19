@@ -1,8 +1,10 @@
-<span class="version">v <%= Vop::VERSION %></span>
-<span class="reset float-right">
-  <span class="status">&nbsp;</span>
-  <i class="fa fa-sync" id="reset"></i>
-  <%#= link_to "#reset", id: "reset" do %>
-    <!--i class="fa fa-sync"></i-->
-  <%# end %>
+<% if user_signed_in? %>
+<span class="user"><%= current_user.email %></span>
+<% end %>
+<span class="box float-right">
+  <span class="version">v <%= Vop::VERSION %></span>
+  <span class="reset">
+    <span class="status">&nbsp;</span>
+    <i class="fa fa-sync" id="reset"></i>
+  </span>
 </span>
