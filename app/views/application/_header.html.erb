@@ -5,18 +5,24 @@
 </span>
 
 <span id="toolbar">
-  <span class="item">
-    <a href="/map"><i class="fa fa-map"></i></a>
-    <%= link_to machines_path do %>
-      <i class="fa fa-list"></i>
+  <span class="items">
+    <span class="item">
+      <a href="/map"><i class="fa fa-map"></i></a>
+    </span>
+    <span class="item">
+      <%= link_to machines_path do %>
+        <i class="fa fa-list"></i>
+      <% end %>
+    </span>
+    <span class="item">
+      <i class="fa fa-wrench" data-toggle="menu"></i>
+    </span>
+    <% if user_signed_in? %>
+    <span class="item">
+      <%= link_to destroy_user_session_path, method: :delete do %>
+        <i class="fa fa-sign-out-alt"></i>
+      <% end %>
+    </span>
     <% end %>
-    <i class="fa fa-wrench" data-toggle="menu"></i>
   </span>
-  <% if user_signed_in? %>
-  <span class="item">
-    <%= link_to destroy_user_session_path, method: :delete do %>
-      <i class="fa fa-sign-out-alt"></i>
-    <% end %>
-  </span>
-  <% end %>
 </span>
