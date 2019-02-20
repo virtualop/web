@@ -7,12 +7,10 @@ Rails.application.routes.draw do
   get 'map/account/:account', to: 'map#account'
   get 'map/group'
   get 'map/host'
-  # get 'map/host_fragment'
 
   get 'machines' => 'machines#index'
   get 'machines/index'
   get 'machines/scan/:machine', to: 'machines#scan', machine: /[^\/]+/
-  # get 'machines/show/:machine', to: 'machines#show', machine: /[^\/]+/
   get 'machines/show/:machine(/:tab)', to: 'machines#show', machine: /[^\/]+/, tab: /[^\/]+/
   get 'machines/services/:machine', to: 'machines#services', machine: /[^\/]+/
   get 'machines/traffic/:machine', to: 'machines#traffic', machine: /[^\/]+/
@@ -24,18 +22,7 @@ Rails.application.routes.draw do
 
   get 'machines/service_icon/:service', to: 'machines#service_icon', service: /[^\/]+/
   get 'machines/service_params/:service', to: 'machines#service_params', service: /[^\/]+/
-
   post 'machines/install_service', to: 'machines#install_service'
-
-  # get 'machines' => 'machines#index'
-  # get 'machines/index'
-  # get 'machines/:machine/delete_record', to: 'machines#delete_record', machine: /[^\/]+/
-
-  # get 'machines/map'
-  # post 'machines/:machine/new_vm', to: 'machines#new_vm', machine: /[^\/]+/
-  # post 'machines/:machine/delete_vm', to: 'machines#delete_vm', machine: /[^\/]+/
-  # get 'machines/:machine/installation_status/:vm', to: 'machines#installation_status', machine: /[^\/]+/, vm: /[^\/\?]+/
-  # get 'machines/:machine', to: 'machines#show', machine: /[^\/]+/
 
   get 'map' => 'map#index'
   get 'map/index'
@@ -43,7 +30,6 @@ Rails.application.routes.draw do
   get 'map/account'
 
   get 'map/host/:machine', to: 'map#host', machine: /[^\/]+/
-  # get 'map/host_fragment/:machine', to: 'map#host_fragment', machine: /[^\/]+/
   get 'map/group/:name', to: 'map#group'
   post 'map/:machine/new_vm', to: 'map#new_vm', machine: /[^\/]+/
 
