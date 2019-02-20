@@ -1,8 +1,6 @@
 include ERB::Util
 
-class DevController < ApplicationController
-
-  before_action :authenticate_user!
+class DevController < ApplicationController  
 
   def reset
     render plain: sprintf("reset complete, %d plugins, %d commands", *$vop.reset)
