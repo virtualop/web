@@ -1,16 +1,18 @@
 <div id="dev-wrap">
-  <div id="title-wrap">
     <div id="header-wrap">
-      <h1>dev</h1>
-    </div>
-    <div id="buttons">
-      <a class="btn btn-primary" href="/dev/refresh" data-turbolinks="false" role="button">refresh</a>
-    </div>
+      <div id="title-wrap" class="float-left">
+        <h1>dev</h1>
+      </div>
+      <div id="buttons" class="float-right">
+        <a class="btn btn-primary" href="/dev/refresh" data-turbolinks="false" role="button">refresh</a>
+      </div>
   </div>
 
-  <% @working_copies.each do |working_copy| %>
+  <div>
+    <% @working_copies.each do |working_copy| %>
     <%= render partial: "working_copy", locals: { :working_copy => working_copy } %>
     <%= render partial: "working_copy_detail", locals: { :working_copy => working_copy } %>
-  <% end %>
-  <%= render partial: "commit_modal" %>
+    <% end %>
+    <%= render partial: "commit_modal" %>
+  </div>
 </div>
