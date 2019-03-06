@@ -6,31 +6,36 @@ class MachinesController < ApplicationController
 
   def show
     @machine = $vop.machines[params[:machine]]
-    #@ssh_status = @machine.test_ssh
-
     @scan = @machine.scan_result
     @ssh_status = @scan["ssh_status"]
 
-    # services
-    begin
-      services_data
-    rescue => e
-      logger.warn "could not fetch services : #{e.message}"
-    end
-
-    # traffic
-    if @services && @services.include?("apache.apache")
-      @domains = @machine.vhosts.select do |vhost|
-        ! vhost["domain"].nil?
+    @installation_status = $vop.installation_status(host_name: @machine.parent.name, vm_name: @machine.short_name)
+    logger.info "installation status : #{@installation_status.pretty_inspect}"
+    if @installation_status == "provisioning"
+      
+    else
+      # services
+      begin
+        services_data
+      rescue => e
+        logger.warn "could not fetch services : #{e.message}"
       end
 
-      traffic_data
-    else
-      @domains = []
-    end
+      # traffic
+      if @services && @services.include?("apache.apache")
+        @domains = @machine.vhosts.select do |vhost|
+          ! vhost["domain"].nil?
+        end
 
-    if params[:tab]
-      logger.info "doing things specific to #{params[:tab]}"
+        traffic_data
+      else
+        @domains = []
+      end
+
+      # tabs
+      if params[:tab]
+        logger.info "doing things specific to #{params[:tab]}"
+      end
     end
   end
 
@@ -200,6 +205,29 @@ class MachinesController < ApplicationController
   def scan
     $vop.inspect_async(params[:machine])
     render json: { status: "scan has been scheduled" }.to_json
+  end
+
+  def screenshot
+    machine_name = params[:machine]
+    if machine_name.end_with? ".ppm"
+      machine_name = machine_name[0..-5]
+    end
+
+    machine = $vop.machines[machine_name]
+    path = machine.screenshot_vm
+    localhost = $vop.machines["localhost"]
+    screenshots_dir = "/tmp/vop_screenshots"
+    local_file = "#{screenshots_dir}/#{machine_name}.ppm"
+    png_file = local_file.split(".")[0..-2].join(".") + ".png"
+
+    logger.debug "downloading screenshot from #{path}"
+
+    localhost.mkdirs screenshots_dir
+    machine.parent.scp_down(remote_path: path, local_path: local_file)
+
+    localhost.ssh("convert #{local_file} #{png_file}")
+
+    send_data open(png_file, "rb") { |f| f.read }
   end
 
 end

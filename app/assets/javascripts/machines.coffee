@@ -130,3 +130,19 @@ $ ->
                   console.log("received data from the past", timestamp)
 
               myChart.update()
+
+  screenshots = $("#screenshot")
+  if screenshots.length > 0
+    screenshot = screenshots[0]
+    setInterval () ->
+      machineName = $(screenshot).closest(".machine").data("machine")
+      console.log("machine name", machineName)
+      console.log("screenshot", screenshot)
+
+      url = "/machines/screenshot/#{machineName}?ts=#{new Date().getTime()}"
+      image = new Image()
+      image.src = url
+      console.log("image", image)
+
+      screenshot.src = url
+    , 20000

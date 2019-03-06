@@ -8,11 +8,19 @@
 
   <div class="row">
     <%= render partial: "basic_info" %>
+    <% if @services %>
     <%= render partial: "services" %>
-    <% if @services && @services.include?("apache.apache") %>
-      <%= render partial: "domains" %>
+      <% if @services.include?("apache.apache") %>
+        <%= render partial: "domains" %>
+      <% end %>
     <% end %>
   </div>
+
+  <% if @installation_status == "provisioning" %>
+  <div class="row">
+    <%= render partial: "screenshot" %>
+  </div>
+  <% end %>
 
   <div class="row">
     <% if @ssh_status %>

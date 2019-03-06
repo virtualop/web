@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get 'machines/show/:machine(/:tab)', to: 'machines#show', machine: /[^\/]+/, tab: /[^\/]+/
   get 'machines/services/:machine', to: 'machines#services', machine: /[^\/]+/
   get 'machines/traffic/:machine', to: 'machines#traffic', machine: /[^\/]+/
+  get 'machines/screenshot/:machine', to: 'machines#screenshot', machine: /[^\/]+/
   # deprecated:
   get 'machines/:machine', to: 'machines#show', machine: /[^\/]+/
 
