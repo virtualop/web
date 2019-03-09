@@ -11,12 +11,18 @@
   </div>
 </div>
 
+<% if @source && @source[:code] %>
 <div class="section">
   <h2>Source</h2>
   <div class="source_wrap">
     <pre class="source"><%= @source[:code] %></pre>
   </div>
 </div>
+<% else %>
+<div class="section excuse">
+  <p>No source found.</p>
+</div>
+<% end %>
 
 <% if @contributors && @contributors.size > 0 %>
 <div class="section">
