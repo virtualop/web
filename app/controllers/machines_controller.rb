@@ -9,11 +9,14 @@ class MachinesController < ApplicationController
     @scan = @machine.scan_result
     @ssh_status = @scan["ssh_status"]
 
-    @installation_status = $vop.installation_status(host_name: @machine.parent.name, vm_name: @machine.short_name)
-    logger.info "installation status : #{@installation_status.pretty_inspect}"
-    if @installation_status == "provisioning"
-      
-    else
+    if @machine.metadata["type"] == "vm"
+      @installation_status = $vop.installation_status(host_name: @machine.parent.name, vm_name: @machine.short_name)
+      logger.info "installation status : #{@installation_status.pretty_inspect}"
+    end
+
+
+    # no need to try to load services and traffic while provisioning
+    if @installation_status.nil? || @installation_status != "provisioning"
       # services
       begin
         services_data
