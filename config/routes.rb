@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  get 'map' => 'map#accounts'
+  get 'map' => 'map#index'
   get 'map/index'
   get 'map/accounts'
   get 'map/account/:account', to: 'map#account'

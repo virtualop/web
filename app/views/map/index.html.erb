@@ -1,2 +1,16 @@
-<h1>Map#index</h1>
-<p>Find me in app/views/map/index.html.erb</p>
+<div id="index-map">
+  <% @accounts.each do |account, payload| %>
+    <% (hosts, host_vms) = payload %>
+    <div class="account">
+      <h2><%= account.alias %></h2>
+      <div id="host_map">
+      <% hosts.each do |host| %>
+        <%= render partial: "host", locals: {
+            host: host,
+            vms: host_vms[host.name]
+          } %>
+      <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

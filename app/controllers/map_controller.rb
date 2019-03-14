@@ -1,6 +1,13 @@
 class MapController < ApplicationController
 
   def index
+    @accounts = {}
+    $vop.hetzner_accounts.each do |account|
+      $logger.info "fetching data for account #{account.alias}"
+
+      host_names = account.hetzner_server_list.map { |x| x["name"] }
+      @accounts[account] = helpers.vms_for_host_names(host_names)
+    end
   end
 
   def accounts
@@ -22,9 +29,6 @@ class MapController < ApplicationController
       @host_vms[host_name] = helpers.host_data(host_name)
       @hosts << $vop.machines[host_name]
     end
-
-    puts "hosts : #{@hosts.map(&:name)}"
-    puts "host_vms : #{@host_vms.pretty_inspect}"
   end
 
   def host
