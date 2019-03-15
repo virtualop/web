@@ -1,4 +1,6 @@
-<div class="wrapper col col-12" id="trafficLog">
+<div class="wrapper col col-12" id="trafficLog"
+  <% if @log_path %>data-path="<%= @log_path %>"<% end %>
+>
   <div class="content">
     <h2>Log</h2>
 
@@ -9,14 +11,16 @@
           <td>IP</td>
           <td>Status</td>
           <td>Request</td>
+          <td>User Agent</td>
         </thead>
         <tbody>
           <% @parsed.reverse.each do |line| %>
           <tr>
             <td><%= line[:formatted_timestamp] %></td>
-            <td><%= line[:remote_ip] %></td>
-            <td><%= line[:status] %></td>
-            <td><%= line[:request] %></td>
+            <td><%= line[:source_ip] || line[:remote_ip] %></td>
+            <td><%= line[:status] || line[:return_code] %></td>
+            <td><%= line[:request] || line[:request_path] %></td>
+            <td><%= line[:user_agent] %></td>
           </tr>
           <% end unless @parsed.nil? %>
         </tbody>

@@ -21,10 +21,29 @@ addTailLine = (line) ->
   $("#trafficLog tbody").prepend(new_tr)
 
 addTail = (input) ->
+  console.log("adding tail", input)
   if input != null && input["content"] != null
     addTailLine(line) for line in input["content"] when line != null
 
-# updated traffic graph (different ActionCable)
+addTailLineToLog = (line) ->
+  date = new Date(line.timestamp * 1000)
+  timestamp = date
+    .toLocaleString('de-DE', month: "2-digit", year: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric")
+    .replace /,/, ""
+  new_tr = $('<tr>')
+    .append( $('<td>').append(timestamp) )
+    .append( $('<td>').append(line.source_ip) )
+    .append( $('<td>').append(line.return_code) )
+    .append( $('<td>').append(line.request_path) )
+    .append( $('<td>').append(line.user_agent) )
+  $("#trafficLog tbody").prepend(new_tr)
+
+addTailToLog = (input) ->
+  console.log("adding tail", input)
+  if input != null && input["content"] != null
+    addTailLineToLog(line) for line in input["content"] when line != null
+
+# update traffic graph (different ActionCable)
 addBucket = (line, value, timestamp) ->
   line.shift()
   line.push(value)
@@ -32,6 +51,31 @@ addBucket = (line, value, timestamp) ->
   d.setUTCSeconds(timestamp)
   myChart.data.labels.shift()
   myChart.data.labels.push(d.toLocaleString('de-DE', hour: '2-digit', minute: '2-digit'))
+
+addGraph = (graph) ->
+  if graph.content.success && graph.content.success.length > 0
+    graph.content.success.forEach (success) ->
+      timestamp = success[0]
+      value = success[1]
+      lastBucket = $("#trafficGraph").data("last-bucket")
+      line = myChart.data.datasets[0].data
+      if lastBucket == timestamp
+        idx = line.length - 1
+        line[idx] = line[idx] + value
+      else
+        if timestamp > lastBucket
+          distance = timestamp - lastBucket
+          if (distance > 60)
+            count = (distance / 60) - 1
+            addBucket(line, 0, timestamp - idx * 60) for idx in [count..1]
+
+          $("#trafficGraph").data("last-bucket", timestamp)
+          addBucket(line, value, timestamp)
+        else
+          console.log("received data from the past", timestamp)
+          console.log("lastBucket", lastBucket)
+
+      myChart.update()
 
 $ ->
   # scan
@@ -100,36 +144,49 @@ $ ->
   # log tail
   trafficLog = $("#trafficLog")
   if trafficLog.length > 0
-    App.tailChannel = App.cable.subscriptions.create { channel: "TailChannel", machine: $("#machine").data("machine"), log: "/var/log/apache2/access.log" },
-      received: (json_data) ->
-        tail = JSON.parse(json_data)
-        addTail(tail)
+    logFile = $(trafficLog).data("path")
 
-    App.graphChannel = App.cable.subscriptions.create { channel: "GraphChannel", machine: $("#machine").data("machine"), log: "/var/log/apache2/access.log" },
-      received: (json_data) ->
-        graph = JSON.parse(json_data)
-        if graph.content.success && graph.content.success.length > 0
-            graph.content.success.forEach (success) ->
-              timestamp = success[0]
-              value = success[1]
-              lastBucket = $("#trafficGraph").data("last-bucket")
-              line = myChart.data.datasets[0].data
-              if lastBucket == timestamp
-                idx = line.length - 1
-                line[idx] = line[idx] + value
-              else
-                if timestamp > lastBucket
-                  distance = timestamp - lastBucket
-                  if (distance > 60)
-                    count = (distance / 60) - 1
-                    addBucket(line, 0, timestamp - idx * 60) for idx in [count..1]
+    if logFile
+      App.tailChannel = App.cable.subscriptions.create { channel: "TailChannel", machine: $("#machine").data("machine"), log: logFile, style: "new" },
+        received: (json_data) ->
+          tail = JSON.parse(json_data)
+          addTailToLog(tail)
 
-                  $("#trafficGraph").data("last-bucket", timestamp)
-                  addBucket(line, value, timestamp)
+      App.graphChannel = App.cable.subscriptions.create { channel: "GraphChannel", machine: $("#machine").data("machine"), log: logFile, style: "new" },
+        received: (json_data) ->
+          graph = JSON.parse(json_data)
+          addGraph(graph)
+    else
+      App.tailChannel = App.cable.subscriptions.create { channel: "TailChannel", machine: $("#machine").data("machine"), log: "/var/log/apache2/access.log" },
+        received: (json_data) ->
+          tail = JSON.parse(json_data)
+          addTail(tail)
+
+      App.graphChannel = App.cable.subscriptions.create { channel: "GraphChannel", machine: $("#machine").data("machine"), log: "/var/log/apache2/access.log" },
+        received: (json_data) ->
+          graph = JSON.parse(json_data)
+          if graph.content.success && graph.content.success.length > 0
+              graph.content.success.forEach (success) ->
+                timestamp = success[0]
+                value = success[1]
+                lastBucket = $("#trafficGraph").data("last-bucket")
+                line = myChart.data.datasets[0].data
+                if lastBucket == timestamp
+                  idx = line.length - 1
+                  line[idx] = line[idx] + value
                 else
-                  console.log("received data from the past", timestamp)
+                  if timestamp > lastBucket
+                    distance = timestamp - lastBucket
+                    if (distance > 60)
+                      count = (distance / 60) - 1
+                      addBucket(line, 0, timestamp - idx * 60) for idx in [count..1]
 
-              myChart.update()
+                    $("#trafficGraph").data("last-bucket", timestamp)
+                    addBucket(line, value, timestamp)
+                  else
+                    console.log("received data from the past", timestamp)
+
+                myChart.update()
 
   screenshots = $("#screenshot")
   if screenshots.length > 0

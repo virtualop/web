@@ -14,7 +14,6 @@ class MachinesController < ApplicationController
       logger.info "installation status : #{@installation_status.pretty_inspect}"
     end
 
-
     # no need to try to load services and traffic while provisioning
     if @installation_status.nil? || @installation_status != "provisioning"
       # services
@@ -53,17 +52,33 @@ class MachinesController < ApplicationController
     begin
       logger.debug "fetching log data for #{@machine.name}"
 
-      # read the last lines of the access log
-      @parsed = @machine.tail_and_parse_access_log(count: 500).map do |line|
-        line[:formatted_timestamp] = Time.at(line[:timestamp_unix]).strftime("%d.%m.%Y %H:%M:%S")
-        line
+      log_path = "/var/log/apache2/access.vop.log"
+      new_style = @machine.file_exists(log_path)
+      if new_style
+        @log_path = log_path
+        # TODO this syntax does not seem to work here (for stacked entities)
+        #@parsed = @machine.tail_and_parse(log: @log_path).map do |line|
+        @parsed = $vop.tail_and_parse(machine: @machine.name, log: @log_path).map do |line|
+          line[:formatted_timestamp] = Time.at(line[:timestamp].to_i).strftime("%d.%m.%Y %H:%M:%S")
+          line
+        end
+      else
+        # read the last lines of the access log
+        @parsed = @machine.tail_and_parse_access_log(count: 500).map do |line|
+          line[:formatted_timestamp] = Time.at(line[:timestamp_unix]).strftime("%d.%m.%Y %H:%M:%S")
+          line
+        end
       end
 
       # index the aggregated data by timestamp (and store by result)
       @interval = params[:interval] ? params[:interval].to_i : 30
       logger.debug "interval : #{@interval}"
       interval = @interval == 30 ? "minute" : "hour"
-      aggregated = $vop.aggregate_logdata(data: @parsed, interval: interval)
+      aggregated = if new_style
+        $vop.aggregate(data: @parsed, interval: interval)
+      else
+        $vop.aggregate_logdata(data: @parsed, interval: interval)
+      end
 
       histogram = {
         success: {},
@@ -115,15 +130,16 @@ class MachinesController < ApplicationController
           start_minute = Time.at(current_minute.to_i - (60 * idx))
           @labels << start_minute.strftime("%H:%M")
           @last_bucket = start_minute.to_i
+          key = new_style ? @last_bucket : start_minute
 
-          if histogram[:success][start_minute]
-            @success << histogram[:success][start_minute]
+          if histogram[:success][key]
+            @success << histogram[:success][key]
           else
             @success << 0
           end
 
-          if histogram[:failed][start_minute]
-            @failed << histogram[:failed][start_minute]
+          if histogram[:failed][key]
+            @failed << histogram[:failed][key]
           else
             @failed << 0
           end
@@ -173,6 +189,7 @@ class MachinesController < ApplicationController
 
   def service_icon
     service = $vop.services.select { |x| x.name == params[:service] }.first
+    raise "no service found with name #{params[:service]} - known services:\n#{$vop.services.pretty_inspect}" if service.nil?
     icon_path = File.join(service.plugin.plugin_dir("files"), service.data["icon"])
 
     if icon_path
@@ -184,14 +201,13 @@ class MachinesController < ApplicationController
 
   def service_params
     service = $vop.services.select { |x| x.name == params[:service] }.first
-    pp service
 
     render json: service.data["params"].to_json()
   end
 
   def install_service
     service = $vop.services.select { |x| x.name == params[:service] }.first
-    puts "installing service #{params[:service]} on #{params[:machine]}"
+    logger.info "installing service #{params[:service]} on #{params[:machine]}"
 
     # pass on all params except these
     blacklist = %w|authenticity_token controller action|
