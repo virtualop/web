@@ -3,7 +3,7 @@
     <h2>Basic Info</h2>
     <p>SSH: <%= @ssh_status ? @ssh_status : "no connection" %></p>
     <p>Last Scan:
-      <span class="last_span"><%= @scan["scan_from"] ? time_ago_in_words(@scan["scan_from"]) + " ago" : "never" %></span>
+      <span id="last_scan"><%= @scan["scan_from"] ? time_ago_in_words(@scan["scan_from"]) + " ago" : "never" %></span>
       &nbsp;
       <span class="scan-button" data-machine="<%= @machine.name %>">
         <button class="btn btn-xs btn-primary">scan</button>

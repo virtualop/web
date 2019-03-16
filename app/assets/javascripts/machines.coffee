@@ -141,6 +141,15 @@ $ ->
     console.log("deltaY", original.deltaY)
     event.preventDefault()
 
+  # scan notifications
+  last_scan = $("#last_scan")
+  if last_scan.length > 0
+    App.scanChannel = App.cable.subscriptions.create { channel: "ScanChannel", machine: $("#machine").data("machine") },
+      received: (json_data) ->
+        scan = JSON.parse(json_data)
+        console.log "scan result", scan.content
+        location.reload()
+
   # log tail
   trafficLog = $("#trafficLog")
   if trafficLog.length > 0
