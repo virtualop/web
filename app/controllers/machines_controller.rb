@@ -49,6 +49,7 @@ class MachinesController < ApplicationController
   end
 
   def traffic_data
+    @has_traffic_log = nil
     begin
       logger.debug "fetching log data for #{@machine.name}"
 
@@ -145,9 +146,13 @@ class MachinesController < ApplicationController
           end
         end
       end
+
+      @has_traffic_log = true
     rescue => e
+      flash.alert = "could not get traffic for #{@machine.name} : #{e.message}"
       logger.warn "could not get traffic for #{@machine.name} : #{e.message}"
       logger.debug e.backtrace.join("\n")
+      @has_traffic_log = false
     end
   end
 

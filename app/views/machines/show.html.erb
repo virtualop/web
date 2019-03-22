@@ -26,13 +26,13 @@
     <% if @ssh_status %>
       <%= render partial: "disk" %>
       <%= render partial: "memory" %>
-      <% if @services && @services.include?("apache.apache") %>
+      <% if @has_traffic_log %>
         <%= render partial: "graph", locals: { time_picker: false } %>
       <% end %>
     <% end %>
   </div>
 
-  <% if @services && @services.include?("apache.apache") %>
+  <% if @has_traffic_log %>
   <div class="row">
     <%= render partial: "log" %>
   </div>
