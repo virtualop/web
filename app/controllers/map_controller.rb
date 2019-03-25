@@ -36,4 +36,30 @@ class MapController < ApplicationController
     @vms = helpers.host_data()
   end
 
+  def host_box
+    host
+
+    render partial: "host", locals: {
+      host: @host,
+      vms: @vms
+    }
+  end
+
+  # --
+
+  def delete
+    $logger.info "deleting machine #{params[:machine]}"
+    machine = $vop.machines[params[:machine]]
+    @host = machine.parent
+
+    machine.delete_machine
+
+    @vms = helpers.host_data(@host.name)
+
+    render partial: "host", locals: {
+      host: @host,
+      vms: @vms
+    }
+  end
+
 end
