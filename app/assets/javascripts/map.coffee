@@ -1,14 +1,18 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
 $ ->
-  $(document).on "click", "#host_map i.fa-plus", ->
+  # VM toolbar
+  $("#host_map").on "mouseenter", ".vm", (event) ->
+    $(event.target).find(".toolbar").show()
+
+  $("#host_map").on "mouseleave", ".vm", (event) ->
+    $(event.target).find(".toolbar").hide()
+
+  # new VM (placeholder form)
+  $("#host_map").on "click", "i.fa-plus", ->
       host_element = $(this).closest(".host").first()
       new_vm_form = host_element.find(".vm_placeholder")
       new_vm_form.show()
 
-  $(document).on "click", "#host_map .new_vm_form i.fa-times", (event) ->
+  $("#host_map").on "click", ".new_vm_form i.fa-times", (event) ->
     vm_element = event.currentTarget.closest(".vm")
     $(vm_element).hide()
 
@@ -17,13 +21,14 @@ $ ->
     $("#dropdownMenuButton").html($(event.currentTarget).data("mb"))
     event.preventDefault()
 
-  $(document).on "submit", ".new_vm_form", (event) ->
+  $("#host_map").on "submit", ".new_vm_form", (event) ->
     event.preventDefault()
     new_vm_form = event.currentTarget
     console.log("submitting new_vm_form", new_vm_form)
 
     vm_name = $(this).find(".name_placeholder").first().val()
-    host_name = $(this).closest(".host").data("machine")
+    host_box = $(this).closest(".host")
+    host_name = host_box.data("machine")
     console.log("gonna create new vm " + vm_name + " on host " + host_name)
 
     payload =
@@ -52,15 +57,35 @@ $ ->
             console.log("received vm installation status update", json_data)
             update = JSON.parse(json_data)
             console.log("update", update)
+
             description = update.status
             if description.match(/ing$/)
               description = "#{update.status}..."
-            else
-              update.status
             $('.vm_installation_status').html("[#{description}]")
+
             if update.status == "prepared"
               $('.vm_placeholder .vm_state_indicator').removeClass("installing")
               $('.vm_placeholder .vm_state_indicator').addClass("installed")
               $('.vm_placeholder .vm_installation_status').fadeOut(1000)
 
+              # reload VM list
+              $.get "/map/host_box/#{host_name}",
+                (new_host_box) ->
+                  console.log("got new host box", new_host_box)
+                  $(host_box).replaceWith(new_host_box)
+
+
     false
+
+  # delete machine
+  $("#host_map").on "click", ".vm .toolbar .fa-trash", (event) ->
+    vm = $(event.target).closest(".vm")
+    host = $(vm).closest(".host")
+    $.ajax
+      url: "/map/delete",
+      type: "DELETE",
+      data:
+        machine: vm.data("machine"),
+        authenticity_token: $('[name="csrf-token"]')[0].content,
+      success: (success) ->
+        $(host).replaceWith(success)

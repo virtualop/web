@@ -59,10 +59,11 @@ class MachinesController < ApplicationController
         @log_path = log_path
         # TODO this syntax does not seem to work here (for stacked entities)
         #@parsed = @machine.tail_and_parse(log: @log_path).map do |line|
-        @parsed = $vop.tail_and_parse(machine: @machine.name, log: @log_path).map do |line|
+        @parsed = $vop.tail_and_parse(machine: @machine.name, log: @log_path, count: 500).map do |line|
+          next if line.nil?
           line[:formatted_timestamp] = Time.at(line[:timestamp].to_i).strftime("%d.%m.%Y %H:%M:%S")
           line
-        end
+        end.compact
       else
         # read the last lines of the access log
         @parsed = @machine.tail_and_parse_access_log(count: 500).map do |line|
@@ -190,6 +191,8 @@ class MachinesController < ApplicationController
   end
 
   def delete
+    $logger.info "deleting machine #{params[:machine]}"
+
   end
 
   def service_icon

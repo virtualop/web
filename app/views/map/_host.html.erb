@@ -19,13 +19,11 @@
     <% vms.each do |vm| %>
     <li class="vm" data-machine="<%= vm["full_name"] %>" data-name="<%= vm["name"] %>">
       <div class="vm_wrapper">
-        <%# installation_status = vm["installation"] ? vm["installation"].status : "finished" %>
         <span
           class="vm_state_indicator <%= vm["readable_state"] %>"
           title="<%= vm["readable_state"] %>">&nbsp;</span>
         <%= link_to vm["name"], "/machines/#{vm["full_name"]}" %>
         <span class="badge badge-secondary"><%= vm["installation_status"] %></span>
-        <!-- [<%#= installation_status %>, <%= vm["install"] %>] -->
         <span class="servicebar">
           <% (vm["services"] || []).each do |service_name| %>
           <span class="service">

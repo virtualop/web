@@ -10,12 +10,12 @@ Rails.application.routes.draw do
 
   get 'machines' => 'machines#index'
   get 'machines/index'
-  get 'machines/scan/:machine', to: 'machines#scan', machine: /[^\/]+/
   get 'machines/show/:machine(/:tab)', to: 'machines#show', machine: /[^\/]+/, tab: /[^\/]+/
   get 'machines/services/:machine', to: 'machines#services', machine: /[^\/]+/
   get 'machines/traffic/:machine', to: 'machines#traffic', machine: /[^\/]+/
+  get 'machines/scan/:machine', to: 'machines#scan', machine: /[^\/]+/
   get 'machines/screenshot/:machine', to: 'machines#screenshot', machine: /[^\/]+/
-  # deprecated:
+  # TODO deprecated:
   get 'machines/:machine', to: 'machines#show', machine: /[^\/]+/
 
   post 'machines/new'
@@ -29,10 +29,12 @@ Rails.application.routes.draw do
   get 'map/index'
 
   get 'map/account'
-
   get 'map/host/:machine', to: 'map#host', machine: /[^\/]+/
+  get 'map/host_box/:machine', to: 'map#host_box', machine: /[^\/]+/
   get 'map/group/:name', to: 'map#group'
-  post 'map/:machine/new_vm', to: 'map#new_vm', machine: /[^\/]+/
+
+  # post 'map/:machine/new_vm', to: 'map#new_vm', machine: /[^\/]+/
+  delete 'map/delete'
 
   get 'plugins/index'
   get 'plugins' => 'plugins#index'
