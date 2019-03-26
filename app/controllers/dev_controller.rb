@@ -1,6 +1,6 @@
 include ERB::Util
 
-class DevController < ApplicationController  
+class DevController < ApplicationController
 
   def reset
     render plain: sprintf("reset complete, %d plugins, %d commands", *$vop.reset)
@@ -8,6 +8,7 @@ class DevController < ApplicationController
 
   def index
     @working_copies = $vop.working_copies_with_detail(machine: "localhost")
+    @page_title = "dev"
     render :index
   end
 

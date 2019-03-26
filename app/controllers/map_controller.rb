@@ -1,6 +1,7 @@
 class MapController < ApplicationController
 
   def index
+    @page_title = "map"
     @accounts = {}
     $vop.hetzner_accounts.each do |account|
       $logger.info "fetching data for account #{account.alias}"
@@ -33,6 +34,7 @@ class MapController < ApplicationController
 
   def host
     @host = $vop.machines[params[:machine]]
+    @page_title = "map #{@host.name}"
     @vms = helpers.host_data()
   end
 
