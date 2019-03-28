@@ -27,7 +27,7 @@ class MapController < ApplicationController
     @host_vms = {}
     @hosts = []
     host_names.each do |host_name|
-      @host_vms[host_name] = helpers.host_data(host_name)
+      @host_vms[host_name] = helpers.vm_list(host_name)
       @hosts << $vop.machines[host_name]
     end
   end
@@ -35,7 +35,7 @@ class MapController < ApplicationController
   def host
     @host = $vop.machines[params[:machine]]
     @page_title = "map #{@host.name}"
-    @vms = helpers.host_data()
+    @vms = helpers.vm_list()
   end
 
   def host_box
@@ -56,7 +56,7 @@ class MapController < ApplicationController
 
     machine.delete_machine
 
-    @vms = helpers.host_data(@host.name)
+    @vms = helpers.vm_list(@host.name)
 
     render partial: "host", locals: {
       host: @host,

@@ -6,6 +6,7 @@ class MachinesController < ApplicationController
 
   def show
     @machine = $vop.machines[params[:machine]]
+    @page_title = @machine.name
     @scan = @machine.scan_result
     @ssh_status = @scan["ssh_status"]
 
@@ -162,9 +163,7 @@ class MachinesController < ApplicationController
 
     @machine = $vop.machines[params[:machine]]
     @services = @machine.detect_services.sort
-    @installables = $vop.services
-      .sort_by { |x| x.name }
-      #.delete_if { |x| @services && @services.include?(x.name) }
+    @installables = $vop.services.sort_by { |x| x.name } #.delete_if { |x| @services && @services.include?(x.name) }      
   end
 
   def services
@@ -197,7 +196,7 @@ class MachinesController < ApplicationController
 
   def service_icon
     service = $vop.services.select { |x| x.name == params[:service] }.first
-    raise "no service found with name #{params[:service]} - known services:\n#{$vop.services.pretty_inspect}" if service.nil?
+    raise "no service found with name #{params[:service]} - known services:\n#{$vop.services.map(&:name)}" if service.nil?
     icon_path = File.join(service.plugin.plugin_dir("files"), service.data["icon"])
 
     if icon_path

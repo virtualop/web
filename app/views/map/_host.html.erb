@@ -37,12 +37,12 @@
         <% if vm["domains"] && vm["domains"].size > 0 %>
             <div class="vm_domains">
               <% vm["domains"].each do |domain| %>
-                <p>
-                  <% if domain["https"] %>
-                  <i class="fa fa-lock"></i>
-                  <% end %>
-                  <%= domain["domain"] %>
-                </p>
+              <div class="domain">
+                <% if domain["https"] %>
+                <span><i class="fa fa-lock"></i></span>
+                <% end %>
+                <span><%= domain["name"] %></span>
+              </div>
               <% end %>
             </div>
         <% end %>

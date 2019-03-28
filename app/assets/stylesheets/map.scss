@@ -97,4 +97,12 @@
 
 #host_map .vm_domains {
   margin-left: 8px;
+
+  .domain {
+    display: flex;
+  }
+
+  i {
+    margin-right: 5px;
+  }
 }
