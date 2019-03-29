@@ -40,22 +40,23 @@
 
 #hostnamp .host .title .toolbar {
   float: right;
+  margin-right: 2px;
+  
 }
 
 #host_map .vm_wrapper {
 }
 
 #host_map .vm {
-  padding: 1px;
-  border: 1px solid #222222;
-  padding: 2px;
+  padding: 5px;
 
   margin-top: 5px;
   margin-bottom: 5px;
+  border: 1px solid #aaa;
 }
 
 #host_map .vm:hover {
-  border: 1px solid #2B2B2B;
+  border: 1px solid #222222;
 }
 
 #host_map .vm_state_indicator.shut_off,
