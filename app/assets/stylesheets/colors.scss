@@ -55,3 +55,17 @@ a:hover {
 pre.source {
   border: 1px solid grey;
 }
+
+#dev-wrap {
+
+  .working-copy {
+    background-color: #eee;
+    border: 1px solid #888;
+  }
+
+  .working-copy-detail {
+    border: 1px solid #bbb;
+    background-color: #ddd;
+  }
+
+}

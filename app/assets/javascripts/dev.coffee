@@ -101,8 +101,12 @@ $ ->
   # refresh
   $("#dev-wrap").on "click", ".refresh-button", (event) ->
     detail = $(event.currentTarget).closest(".working-copy-detail")
-    workingCopy = $(detail).data("name")
-    $.get "/dev/git_status/" + workingCopy + "?refresh=true", (data) ->
+    workingCopy = $(detail).prev(".working-copy").first()
+    console.log("workingCopy", workingCopy)
+    changesButton = $(workingCopy).find(".changes-button").first()
+    changesButton[0].innerHTML = "&hellip;"
+    workingCopyName = $(detail).data("name")
+    $.get "/dev/git_status/" + workingCopyName + "?refresh=true", (data) ->
       processChanges(detail, data)
 
   # checkbox
@@ -118,7 +122,7 @@ $ ->
 
   # close
   $("#dev-wrap").on "click", ".detail-close-button", (event) ->
-    [data, status, xhr] = event.detail
+    # [data, status, xhr] = event.detail
     $(event.currentTarget).closest(".working-copy-detail").hide()
 
   # diff
