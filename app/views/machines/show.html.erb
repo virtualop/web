@@ -1,5 +1,5 @@
 <div id="machine" class="container-fluid machine" data-machine="<%= @machine.name %>">
-  <div class="row">
+  <div class="row" id="header">
     <div class="col col-12">
       <h1><%= @machine.name %></h1>
       <p><%= @machine.metadata["type"] %></p>
@@ -7,11 +7,11 @@
   </div>
 
   <div class="row">
-    <%= render partial: "basic_info" %>
+    <%= render_box "basic_info" %>
     <% if @services %>
-    <%= render partial: "services" %>
+    <%= render_box "services" %>
       <% if @services.include?("apache.apache") %>
-        <%= render partial: "domains" %>
+        <%= render_box "domains" %>
       <% end %>
     <% end %>
   </div>
@@ -24,8 +24,8 @@
 
   <div class="row">
     <% if @ssh_status %>
-      <%= render partial: "disk" %>
-      <%= render partial: "memory" %>
+      <%= render_box "disk" %>
+      <%= render_box "memory" %>
       <% if @has_traffic_log %>
         <%= render partial: "graph", locals: { time_picker: false } %>
       <% end %>

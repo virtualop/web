@@ -18,15 +18,31 @@ $border-width: 2px;
 
 #machine {
 
+  .row {
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+
+  .row#header {
+    margin-bottom: 5px;
+  }
+
+  .col {
+  }
+
   .wrapper {
-    // padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .content {
-    border: 1px solid #3B3B3B;
-    padding-bottom: 15px;
+    border: 1px solid #888;
 
-    margin-bottom: 8px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+
     min-height: 150px;
   }
 

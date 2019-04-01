@@ -1,13 +1,8 @@
-<div id="vhosts" class="wrapper col col-4">
-  <div class="content">
-    <h2>Domains</h2>
-    <ul>
-      <% @domains.each do |domain| %>
-      <li>
-        <span><a href="<%= domain["url"] %>"><%= domain["name"] %></a></span>
-        <span><%= domain["https"] %></span>
-      <li>
-      <% end %>
-    </ul>
-  </div>
-</div>
+<h2>Domains</h2>
+<ul>
+  <% @domains.each do |domain| %>
+  <li>
+    <span><a href="<%= domain["url"] %>"><%= domain["name"] %></a></span>
+  <li>
+  <% end %>
+</ul>

@@ -1,34 +1,30 @@
-<div id="disk" class="wrapper col col-4">
-  <div class="content">
-    <h2>Disk</h2>
+<h2>Disk</h2>
 
-    <table>
-      <thead>
-        <% %w|mount size free full|.each do |col| %>
-          <td><%= col %></td>
-        <% end %>
-      </thead>
-      <tbody>
-      <% @machine.disk_free.each do |row|
-          full = row[:full].split("%").first.to_i
-      %>
-      <tr>
-        <td><%= row[:mount_point][0..63] %></td>
-        <td><%= row[:size] %></td>
-        <td><%= row[:free] %></td>
-        <td>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar"
-              style="width: <%= full %>%"
-              aria-valuenow="<%= full %>"
-              aria-valuemin="0" aria-valuemax="100">
-              <span class="progress-text" role="title" title="<%= full %>% full"><%= full %>%</span>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
+<table>
+  <thead>
+    <% %w|mount size free full|.each do |col| %>
+      <td><%= col %></td>
+    <% end %>
+  </thead>
+  <tbody>
+  <% @machine.disk_free.each do |row|
+      full = row[:full].split("%").first.to_i
+  %>
+  <tr>
+    <td><%= row[:mount_point][0..63] %></td>
+    <td><%= row[:size] %></td>
+    <td><%= row[:free] %></td>
+    <td>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar"
+          style="width: <%= full %>%"
+          aria-valuenow="<%= full %>"
+          aria-valuemin="0" aria-valuemax="100">
+          <span class="progress-text" role="title" title="<%= full %>% full"><%= full %>%</span>
+        </div>
+      </div>
+    </td>
+  </tr>
+  <% end %>
+  </tbody>
+</table>
