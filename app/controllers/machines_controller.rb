@@ -26,9 +26,7 @@ class MachinesController < ApplicationController
 
       # traffic
       if @services && @services.include?("apache.apache")
-        @domains = @machine.vhosts.select do |vhost|
-          ! vhost["domain"].nil?
-        end
+        @domains = @machine.domains
 
         traffic_data
       else
@@ -163,7 +161,7 @@ class MachinesController < ApplicationController
 
     @machine = $vop.machines[params[:machine]]
     @services = @machine.detect_services.sort
-    @installables = $vop.services.sort_by { |x| x.name } #.delete_if { |x| @services && @services.include?(x.name) }      
+    @installables = $vop.services.sort_by { |x| x.name } #.delete_if { |x| @services && @services.include?(x.name) }
   end
 
   def services

@@ -2,9 +2,10 @@
   <div class="content">
     <h2>Domains</h2>
     <ul>
-      <% @domains.each do |vhost| %>
+      <% @domains.each do |domain| %>
       <li>
-        <%= vhost["domain"] %>
+        <span><a href="<%= domain["url"] %>"><%= domain["name"] %></a></span>
+        <span><%= domain["https"] %></span>
       <li>
       <% end %>
     </ul>
