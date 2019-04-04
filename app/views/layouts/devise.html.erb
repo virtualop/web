@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><%= @page_title || "vop login" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= action_cable_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= favicon_link_tag %>
+  </head>
+
+  <body>
+    <div id="burrito">
+      <header>
+        <%= render partial: "header" %>
+      </header>
+      <div class="content-body">
+        <main class="content devise" role="main">
+          <div>
+            <%= render partial: "messages" %>
+            <%= yield %>
+          </div>
+        </main>
+      </div>
+      <footer>
+        <%#= render partial: "footer" %>
+      </footer>
+    </div>
+    <div id="menu" style="display: none">
+      <%= render partial: "menu" %>
+    </div>
+  </body>
+</html>
