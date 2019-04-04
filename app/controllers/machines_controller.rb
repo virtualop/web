@@ -161,7 +161,7 @@ class MachinesController < ApplicationController
 
     @machine = $vop.machines[params[:machine]]
     @services = @machine.detect_services.sort
-    @installables = $vop.services.sort_by { |x| x.name } #.delete_if { |x| @services && @services.include?(x.name) }
+    @installables = $vop.known_services.sort_by { |x| x.name } #.delete_if { |x| @services && @services.include?(x.name) }
   end
 
   def services
@@ -193,9 +193,9 @@ class MachinesController < ApplicationController
   end
 
   def service_icon
-    service = $vop.services.select { |x| x.name == params[:service] }.first
-    raise "no service found with name #{params[:service]} - known services:\n#{$vop.services.map(&:name)}" if service.nil?
-    icon_path = File.join(service.plugin.plugin_dir("files"), service.data["icon"])
+    service = $vop.known_services.select { |x| x.name == params[:service] }.first
+    raise "no service found with name #{params[:service]} - known services:\n#{$vop.known_services.map(&:name)}" if service.nil?
+    icon_path = service.data["icon"]
 
     if icon_path
       send_data open(icon_path, "rb") { |f| f.read }
@@ -205,13 +205,13 @@ class MachinesController < ApplicationController
   end
 
   def service_params
-    service = $vop.services.select { |x| x.name == params[:service] }.first
+    service = $vop.known_services.select { |x| x.name == params[:service] }.first
 
     render json: service.data["params"].to_json()
   end
 
   def install_service
-    service = $vop.services.select { |x| x.name == params[:service] }.first
+    service = $vop.known_services.select { |x| x.name == params[:service] }.first
     logger.info "installing service #{params[:service]} on #{params[:machine]}"
 
     # pass on all params except these
