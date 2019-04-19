@@ -82,7 +82,8 @@ $ ->
 
   $("#dev-wrap").on "ajax:error", ".pull-button", (event) ->
     [data, status, xhr] = event.detail
-    $("#dev-wrap").append(data.body.innerHTML)
+    detail = $(event.target).closest(".working-copy").next(".working-copy-detail")
+    $(detail).append(data.body.innerHTML)
 
   # push
   $("#dev-wrap").on "ajax:success", ".push-button", (event) ->
