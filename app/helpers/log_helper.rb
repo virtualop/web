@@ -10,7 +10,7 @@ module LogHelper
     end
 
     def channel_name(message_json = nil)
-      if queue == "installation_status" || queue == "vm_installation_status" || queue == "scan"
+      if queue == "installation_status" || queue == "vm_installation_status" || queue == "scan" || queue == "memory_updates"
         message = JSON.parse(message_json)
         "#{queue}_#{message["machine"]}"
       elsif queue == "tail" || queue == "graph"
@@ -39,7 +39,7 @@ module LogHelper
   end
 
   def self.message_pump
-    threads = %w|vop_log installation_status vm_installation_status tail graph scan|.map do |queue|
+    threads = %w|vop_log installation_status vm_installation_status tail graph scan memory_updates|.map do |queue|
       self.watch queue
     end
     threads.each do |thread|

@@ -212,3 +212,22 @@ $ ->
 
       screenshot.src = url
     , 20000
+
+  doughnuts = $("#memoryDoughnut")
+  if doughnuts.length > 0
+    doughnut = doughnuts[0]
+    console.log("doughnut found", doughnut)
+    App.scanChannel = App.cable.subscriptions.create { channel: "MemoryUpdateChannel", machine: $("#machine").data("machine") },
+      received: (json_data) ->
+        update = JSON.parse(json_data)
+        console.log "memory update", update.content
+        newData = []
+        update.content.forEach (row) ->
+          console.log "row", row
+          if row.area == "Mem"
+            newData.push(row.used)
+            newData.push(row.available)
+          if row.area == "Swap"
+            newData.push(row.used)
+        doughnutChart.data.datasets[0].data = newData
+        doughnutChart.update()

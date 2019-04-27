@@ -1,0 +1,44 @@
+<h2>Memory</h2>
+
+<div class="canvas-wrapper">
+  <canvas id="memoryDoughnut"></canvas>
+</div>
+
+<script>
+var doughnutCtx = document.getElementById("memoryDoughnut").getContext('2d');
+var doughnutChart = new Chart(doughnutCtx, {
+    type: "doughnut",
+    responsive: true,
+    maintainAspectRatio: false,
+    data: {
+        labels: [ "Used", "Available", "Swap Used" ],
+        datasets: [
+        {
+          data: [
+            <%= @memory["Mem"]["used"].to_i %>,
+            <%= @memory["Mem"]["available"].to_i %>,
+            <%= @memory["Swap"]["used"].to_i %>,
+          ],
+          backgroundColor: [
+            'rgba(255, 16, 16, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            // 'rgb(0,105,217, 0.8)',
+            "rgb(238, 238, 238, 0.8)",
+          ],
+          borderColor: [
+            'rgba(255, 16, 16, 1)',
+            'rgba(255, 206, 86, 1)',
+            // 'rgb(0,105,217, 1)',
+            "rgb(238, 238, 238)"
+          ],
+        }
+      ]
+    },
+    options: {
+        legend: {
+          display: true,
+          position: "right"
+        }
+    }
+});
+</script>

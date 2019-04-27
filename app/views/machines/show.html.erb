@@ -20,7 +20,8 @@
       <% if @ssh_status %>
         <div class="row">
             <%= render_box "disk" %>
-            <%= render_box "memory" %>
+            <%#= render_box "memory" %>
+            <%= render_box "memory_doughnut" %>
         </div>
       <% end %>
     </div>
@@ -37,7 +38,7 @@
   <div class="row">
     <%= render partial: "screenshot" %>
   </div>
-  <% end %>  
+  <% end %>
 
   <% if @has_traffic_log %>
   <div class="row">

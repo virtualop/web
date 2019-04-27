@@ -10,6 +10,13 @@ class MachinesController < ApplicationController
     @scan = @machine.scan_result
     @ssh_status = @scan["ssh_status"]
 
+    # memory doughnut
+    @memory = {}
+    @machine.memory(unit: "m").each do |line|
+      @memory[line["area"]] = line
+    end
+
+    # installation status
     if @machine.metadata["type"] == "vm"
       @installation_status = $vop.installation_status(host_name: @machine.parent.name, vm_name: @machine.short_name)
       logger.info "installation status : #{@installation_status.pretty_inspect}"
