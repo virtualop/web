@@ -10,12 +10,6 @@ class MachinesController < ApplicationController
     @scan = @machine.scan_result
     @ssh_status = @scan["ssh_status"]
 
-    # memory doughnut
-    @memory = {}
-    @machine.memory(unit: "m").each do |line|
-      @memory[line["area"]] = line
-    end
-
     # installation status
     if @machine.metadata["type"] == "vm"
       @installation_status = $vop.installation_status(host_name: @machine.parent.name, vm_name: @machine.short_name)
@@ -24,6 +18,12 @@ class MachinesController < ApplicationController
 
     # no need to try to load services and traffic while provisioning
     if @installation_status.nil? || @installation_status != "provisioning"
+      # memory doughnut
+      @memory = {}
+      @machine.memory(unit: "m").each do |line|
+        @memory[line["area"]] = line
+      end
+
       # services
       begin
         services_data
