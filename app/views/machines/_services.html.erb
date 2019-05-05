@@ -44,7 +44,7 @@
           <form>
             <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token.to_s %>" />
             <input type="hidden" name="machine" value="<%= @machine.name %>" />
-            <input type="hidden" class="service" name="service" />
+            <input type="hidden" class="service" name="known_service" />
             <div class="params container"></div>
           </form>
         </div>
