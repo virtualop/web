@@ -1,0 +1,16 @@
+<h2>Databases</h2>
+
+<table>
+  <thead>
+    <% %w|name|.each do |col| %>
+      <td><%= col %></td>
+    <% end %>
+  </thead>
+  <tbody>
+  <% @machine.user_databases.each do |row| %>
+  <tr>
+    <td><%= row["name"] %></td>
+  </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -1,7 +1,16 @@
 class MachinesController < ApplicationController
 
   def index
-    @machines = $vop.machines.sort_by(&:name)
+    @machines = $vop.scan_results.map do |name, scan_result|
+      scan_result["name"] = name
+      scan_result["last_seen"] = Time.at(scan_result["scan_from"]) unless scan_result["scan_from"].nil?
+      scan_result
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => @machines }
+    end
   end
 
   def show
@@ -10,6 +19,23 @@ class MachinesController < ApplicationController
     @scan = @machine.scan_result
     @ssh_status = @scan["ssh_status"]
 
+    # tabs
+    if params[:tab]
+      logger.info "doing things specific to #{params[:tab]}"
+
+      case params[:tab]
+      when "files"
+        @path = params[:path] || "~"
+        @files = @machine.list_files(@path)
+      end
+
+      render template: "machines/tabs/#{params[:tab]}"
+    else
+      default_machine_data
+    end
+  end
+
+  def default_machine_data
     # installation status
     if @machine.metadata["type"] == "vm"
       @installation_status = $vop.installation_status(host_name: @machine.parent.name, vm_name: @machine.short_name)
@@ -39,11 +65,6 @@ class MachinesController < ApplicationController
       else
         @domains = []
       end
-
-      # tabs
-      if params[:tab]
-        logger.info "doing things specific to #{params[:tab]}"
-      end
     end
   end
 
@@ -57,15 +78,10 @@ class MachinesController < ApplicationController
   def traffic_data
     @has_traffic_log = nil
     begin
-      logger.debug "fetching log data for #{@machine.name}"
-
-      log_path = "/var/log/apache2/access.vop.log"
-      new_style = @machine.file_exists(log_path)
+      @log_path = "/var/log/apache2/access.vop.log"
+      new_style = @machine.file_exists(@log_path)
       if new_style
-        @log_path = log_path
-        # TODO this syntax does not seem to work here (for stacked entities)
-        #@parsed = @machine.tail_and_parse(log: @log_path).map do |line|
-        @parsed = $vop.tail_and_parse(machine: @machine.name, log: @log_path, count: 500).map do |line|
+        @parsed = @machine.tail_and_parse(log: @log_path, count: 500).map do |line|
           next if line.nil?
           line[:formatted_timestamp] = Time.at(line[:timestamp].to_i).strftime("%d.%m.%Y %H:%M:%S")
           line

@@ -20,6 +20,9 @@
       <% if @ssh_status %>
         <div class="row">
             <%= render_box "disk" %>
+            <% if @services.include?("mysql.mysql") %>
+              <%= render_box "databases" %>
+            <% end %>
             <%#= render_box "memory" %>
             <%= render_box "memory_doughnut" %>
         </div>

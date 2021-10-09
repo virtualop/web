@@ -27,14 +27,57 @@ main.content {
 }
 
 main.content.devise {
-  // margin-left: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding-top: 0;
 
-  > div {
-    padding: 10px;
-    border: 1px solid #ccc;
+  #login-screen,
+  #devise-screen {
+    height: 100%;
+
+    h2 {
+      margin-top: 15px;
+    }
+
+    #login-form-area,
+    #devise-form-area {
+      height: 90%;
+
+      #login-form,
+      #devise-form {
+          border: 1px solid #ccc;
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+
+      .field {
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        input[type=email], input[type=password] {
+          width: 100%;
+        }
+
+        input[type=checkbox] {
+          vertical-align: middle;
+        }
+      }
+
+      .line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .links {
+        margin-top: 15px;
+        display: flex;
+
+        .signup {
+          flex: 1;
+        }
+      }
+
+    }
+
   }
 
 }

@@ -28,10 +28,11 @@ addTail = (input) ->
 addTailLineToLog = (line) ->
   date = new Date(line.timestamp * 1000)
   timestamp = date
-    .toLocaleString('de-DE', month: "2-digit", year: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric")
+    .toLocaleString('de-DE', month: "2-digit", year: "numeric", day: "2-digit", hour: "numeric", minute: "numeric", second: "numeric")
     .replace /,/, ""
   new_tr = $('<tr>')
     .append( $('<td>').append(timestamp) )
+    .append( $('<td>').append(line.http_host) )
     .append( $('<td>').append(line.source_ip) )
     .append( $('<td>').append(line.return_code) )
     .append( $('<td>').append(line.request_path) )
@@ -39,7 +40,6 @@ addTailLineToLog = (line) ->
   $("#trafficLog tbody").prepend(new_tr)
 
 addTailToLog = (input) ->
-  console.log("adding tail", input)
   if input != null && input["content"] != null
     addTailLineToLog(line) for line in input["content"] when line != null
 
@@ -154,7 +154,6 @@ $ ->
   trafficLog = $("#trafficLog")
   if trafficLog.length > 0
     logFile = $(trafficLog).data("path")
-
     if logFile
       App.tailChannel = App.cable.subscriptions.create { channel: "TailChannel", machine: $("#machine").data("machine"), log: logFile, style: "new" },
         received: (json_data) ->

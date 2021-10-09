@@ -9,6 +9,7 @@
   <tbody>
   <% @machine.disk_free.each do |row|
       full = row[:full].split("%").first.to_i
+      next if row[:mount_point].starts_with? "/snap"
   %>
   <tr>
     <td><%= row[:mount_point][0..63] %></td>

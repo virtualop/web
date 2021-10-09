@@ -8,6 +8,7 @@
       <table>
         <thead>
           <td class="timestamp">Timestamp</td>
+          <td>Host</td>
           <td>IP</td>
           <td>Status</td>
           <td>Request</td>
@@ -17,6 +18,7 @@
           <% @parsed.reverse.each do |line| %>
           <tr>
             <td><%= line[:formatted_timestamp] %></td>
+            <td><%= line[:http_host] %></td>
             <td><%= line[:source_ip] || line[:remote_ip] %></td>
             <td><%= line[:status] || line[:return_code] %></td>
             <td><%= line[:request] || line[:request_path] %></td>

@@ -15,20 +15,30 @@
 
   <body>
     <div id="burrito">
-      <header>
-        <%= render partial: "header" %>
-      </header>
+      <!--header>
+        <%#= render partial: "header" %>
+      </header-->
       <div class="content-body">
-        <main class="content devise" role="main">
-          <div>
-            <%= render partial: "messages" %>
-            <%= yield %>
+        <main class="content devise container-fluid" role="main">
+          <div class="row" id="devise-screen">
+            <div class="col" style="background-color: black;">
+
+            </div>
+            <div class="col">
+              <h2>Login</h2>
+              <div class="row align-items-center justify-content-center" id="devise-form-area">
+                <div class="col-6" id="devise-form">
+                  <%= render partial: "messages" %>
+                  <%= yield %>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       </div>
-      <footer>
+      <!--footer>
         <%#= render partial: "footer" %>
-      </footer>
+      </footer-->
     </div>
     <div id="menu" style="display: none">
       <%= render partial: "menu" %>
