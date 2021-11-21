@@ -1,0 +1,17 @@
+<h2>Listen Ports</h2>
+
+<table>
+  <thead>
+    <% %w|port addresses|.each do |col| %>
+      <td><%= col %></td>
+    <% end %>
+  </thead>
+  <tbody>
+  <% @machine.listen_ports.each do |port, addresses| %>
+  <tr>
+    <td><%= port %></td>
+    <td><%= addresses.join(" ") %></td>
+  </tr>
+  <% end %>
+  </tbody>
+</table>

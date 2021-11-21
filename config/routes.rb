@@ -46,6 +46,13 @@ Rails.application.routes.draw do
   get 'commands/entity/:entity' => 'commands#entity', entity: /[^\/]+/
   get 'commands/:command' => 'commands#command', command: /[^\/]+/
 
+  get 'services/index'
+  get 'services/show/:service(/:machine)', to: 'services#show', service: /[^\/]+/, machine: /[^\/]+/
+  get 'services/package_status/:service/:machine', to: 'services#package_status', service: /[^\/]+/, machine: /[^\/]+/
+  post 'services/parse/package', to: 'services#parse_package'
+  post 'services/add/package/:service(/:machine)', to: 'services#add_package', service: /[^\/]+/, machine: /[^\/]+/
+  post 'services/install/:service/:machine', to: 'services#install', service: /[^\/]+/, machine: /[^\/]+/
+
   get 'dev' => 'dev#index'
   get 'dev/index'
   get 'dev/reset'

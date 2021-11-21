@@ -1,0 +1,53 @@
+<div id="service_detail" class="container-fluid" data-name="<%= @service.name %>" data-machine="<%= @machine&.name %>">
+
+  <div class="row">
+    <div class="col col-6" id="title">
+      <h1>Service <%= @service.name %><%= @machine ? " @ #{@machine.name}" : "" %></h1>
+    </div>
+    <div class="col col-6" id="buttons">
+      <% if @machine %>
+      <a href="#" id="install">install</a>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h2>Packages</h2>
+    <% if @machine %>
+      <table class="table" id="package_status">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Installed</th>
+            <th scope="col">Available</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @package_status.each do |status| %>
+          <tr>
+            <td><%= status[:name] %></td>
+            <td><%= status[:installed] %></td>
+            <td><%= status[:available] %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <li>
+        <% @packages&.each do |package| %>
+        <ul><%= package %></ul>
+        <% end %>
+      </li>
+    <% end %>
+    <br/>
+    <div class="add_package">
+      <form>
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token.to_s %>" />
+        <textarea cols="50" rows="10" name="input"></textarea>
+      </form>
+      <div class="button_area">
+        <a id="add_package" href="#">add</a>
+      </div>
+    </div>
+  </div>
+</div>

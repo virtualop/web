@@ -1,0 +1,20 @@
+<h1>Services</h1>
+
+<div id="service-list">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @services.each_with_index do |service, idx| %>
+      <tr>
+        <td scope="row"><%= idx %></td>
+        <td><%= link_to "/services/show/#{service.name}" do %><span class="name"><%= service.name %></span><% end %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

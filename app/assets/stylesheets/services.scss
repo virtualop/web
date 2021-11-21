@@ -1,0 +1,18 @@
+// Place all the styles related to the services controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#service_detail {
+  padding-left: 10px;
+
+  #package_status {
+    width: 600px;
+    margin-left: 10px;
+  }
+
+  .add_package {
+    textarea {
+      display: none;
+    }
+  }
+}

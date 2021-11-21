@@ -51,37 +51,5 @@
     <% end %>
   </ul>
   <% end %>
-  <div class="modal fade" id="newVmSettings"
-    tabindex="-1" role="dialog" aria-labelledby="newVmSettingsModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="newVmSettingsModalLabel">New VM</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <span>memory:</span>
-            <button type="button" id="dropdownMenuButton"
-              class="btn btn-secondary dropdown-toggle"
-              data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">512</button>
-            <div class="dropdown-menu memory" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#" data-mb="512">512</a>
-              <a class="dropdown-item" href="#" data-mb="1024">1024</a>
-              <a class="dropdown-item" href="#" data-mb="2048">2048</a>
-            </div>
-            <span>MB</span>
-          </div>
-          <div>
-            <span>disk:</span>
-            <input id="diskSize" type="number" value="25" />
-            <span>GB</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render partial: "new_vm_dialog" %>
 </div>
