@@ -21,7 +21,11 @@
             <td><%= line[:http_host] %></td>
             <td><%= line[:source_ip] || line[:remote_ip] %></td>
             <td><%= line[:status] || line[:return_code] %></td>
-            <td><%= line[:request] || line[:request_path] %></td>
+            <%
+              request_path = line[:request] || line[:request_path]
+              size_trimmed_request = request_path.slice(0, 79)
+            %>
+            <td title="<%= request_path %>"><%= size_trimmed_request %></td>
             <td><%= line[:user_agent] %></td>
           </tr>
           <% end unless @parsed.nil? %>

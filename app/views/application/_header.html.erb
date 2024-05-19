@@ -14,8 +14,22 @@
         <i class="fa fa-list"></i>
       <% end %>
     </span>
-    <span class="item">
+    <!-- <span class="item">
       <i class="fa fa-wrench" data-toggle="menu"></i>
+    </span> -->
+    <span class="item menu">
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <i class="fa fa-wrench" data-toggle="menu"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><%= link_to "plugins", plugins_path %></li>
+          <li><%= link_to "commands", commands_path %></li>
+          <!-- <li><a href="#">Something else here</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li> -->
+        </ul>
+      </div>
     </span>
     <% if user_signed_in? %>
     <span class="item">
